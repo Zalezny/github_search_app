@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:github_search_app/data/models/dto/github_user_dto.dart';
 
-part 'search_users_response.freezed.dart';
-part 'search_users_response.g.dart';
+part 'generated/search_users_response.freezed.dart';
+part 'generated/search_users_response.g.dart';
 
 @freezed
 abstract class SearchUsersResponse with _$SearchUsersResponse {
@@ -12,5 +12,6 @@ abstract class SearchUsersResponse with _$SearchUsersResponse {
     required List<GithubUserDto> items,
   }) = _SearchUsersResponse;
 
-  factory SearchUsersResponse.fromJson(Map<String, dynamic> json) => _$SearchUsersResponseFromJson(json);
+  factory SearchUsersResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchUsersResponseFromJson(json);
 }

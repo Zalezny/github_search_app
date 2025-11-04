@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'github_user_dto.dart';
+part of '../github_user_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

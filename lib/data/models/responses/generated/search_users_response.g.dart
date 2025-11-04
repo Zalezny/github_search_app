@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'search_users_response.dart';
+part of '../search_users_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -20,5 +20,5 @@ Map<String, dynamic> _$SearchUsersResponseToJson(
 ) => <String, dynamic>{
   'total_count': instance.totalCount,
   'incomplete_results': instance.incompleteResults,
-  'items': instance.items,
+  'items': instance.items.map((e) => e.toJson()).toList(),
 };

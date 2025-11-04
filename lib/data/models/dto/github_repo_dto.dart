@@ -1,15 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:github_search_app/domain/entities/github_repository.dart';
 import 'package:github_search_app/data/models/dto/github_owner_dto.dart';
+import 'package:github_search_app/domain/entities/github_repo.dart';
 
-part 'github_repository_dto.freezed.dart';
-part 'github_repository_dto.g.dart';
+part 'generated/github_repo_dto.freezed.dart';
+part 'generated/github_repo_dto.g.dart';
 
 @freezed
-abstract class GithubRepositoryDto with _$GithubRepositoryDto {
-  const GithubRepositoryDto._();
+abstract class GithubRepoDto with _$GithubRepoDto {
+  const GithubRepoDto._();
 
-  const factory GithubRepositoryDto({
+  const factory GithubRepoDto({
     required int id,
     required String name,
     @JsonKey(name: 'full_name') required String fullName,
@@ -20,12 +20,12 @@ abstract class GithubRepositoryDto with _$GithubRepositoryDto {
     required String? language,
     required GithubOwnerDto owner,
     @JsonKey(name: 'updated_at') required String? updatedAt,
-  }) = _GithubRepositoryDto;
+  }) = _GithubRepoDto;
 
-  factory GithubRepositoryDto.fromJson(Map<String, dynamic> json) => _$GithubRepositoryDtoFromJson(json);
+  factory GithubRepoDto.fromJson(Map<String, dynamic> json) => _$GithubRepoDtoFromJson(json);
 
-  GithubRepository toDomain() {
-    return GithubRepository(
+  GithubRepo toDomain() {
+    return GithubRepo(
       id: id,
       name: name,
       fullName: fullName,

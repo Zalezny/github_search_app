@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:github_search_app/domain/entities/github_owner.dart';
 
-part 'github_repository.freezed.dart';
+part 'generated/github_repo.freezed.dart';
 
 @freezed
-abstract class GithubRepository with _$GithubRepository {
-  const factory GithubRepository({
+abstract class GithubRepo with _$GithubRepo {
+  const factory GithubRepo({
     required int id,
     required String name,
     required String fullName,
@@ -16,5 +16,5 @@ abstract class GithubRepository with _$GithubRepository {
     required String language,
     required GithubOwner owner,
     required String? updatedAt,
-  }) = _GithubRepository;
+  }) = _GithubRepo;
 }

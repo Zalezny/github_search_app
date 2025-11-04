@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'github_repository_dto.dart';
+part of '../github_repo_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_GithubRepositoryDto _$GithubRepositoryDtoFromJson(Map<String, dynamic> json) =>
-    _GithubRepositoryDto(
+_GithubRepoDto _$GithubRepoDtoFromJson(Map<String, dynamic> json) =>
+    _GithubRepoDto(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       fullName: json['full_name'] as String,
@@ -20,17 +20,16 @@ _GithubRepositoryDto _$GithubRepositoryDtoFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] as String?,
     );
 
-Map<String, dynamic> _$GithubRepositoryDtoToJson(
-  _GithubRepositoryDto instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'name': instance.name,
-  'full_name': instance.fullName,
-  'description': instance.description,
-  'html_url': instance.htmlUrl,
-  'stargazers_count': instance.stargazersCount,
-  'forks_count': instance.forksCount,
-  'language': instance.language,
-  'owner': instance.owner,
-  'updated_at': instance.updatedAt,
-};
+Map<String, dynamic> _$GithubRepoDtoToJson(_GithubRepoDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'full_name': instance.fullName,
+      'description': instance.description,
+      'html_url': instance.htmlUrl,
+      'stargazers_count': instance.stargazersCount,
+      'forks_count': instance.forksCount,
+      'language': instance.language,
+      'owner': instance.owner.toJson(),
+      'updated_at': instance.updatedAt,
+    };

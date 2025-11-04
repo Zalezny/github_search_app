@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:github_search_app/domain/entities/github_owner.dart';
 
-part 'github_owner_dto.freezed.dart';
-part 'github_owner_dto.g.dart';
+part 'generated/github_owner_dto.freezed.dart';
+part 'generated/github_owner_dto.g.dart';
 
 @freezed
 abstract class GithubOwnerDto with _$GithubOwnerDto {

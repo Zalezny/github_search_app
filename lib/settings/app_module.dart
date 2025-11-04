@@ -1,13 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:github_search_app/data/datasources/github_api_service.dart';
+import 'package:github_search_app/data/datasources/github_repo_api_service.dart';
+import 'package:github_search_app/data/datasources/github_users_api_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 @module
 abstract class AppModule {
   @lazySingleton
-  Logger logger() => Logger(printer: PrettyPrinter(methodCount: 0, errorMethodCount: 5, lineLength: 50, colors: true, printEmojis: true));
+  Logger logger() => Logger(
+    printer: PrettyPrinter(
+      methodCount: 0,
+      errorMethodCount: 5,
+      lineLength: 50,
+      colors: true,
+      printEmojis: true,
+    ),
+  );
 
   @lazySingleton
   Dio dio(Logger logger) {
@@ -22,7 +31,14 @@ abstract class AppModule {
     );
     if (kDebugMode) {
       dio.interceptors.add(
-        LogInterceptor(request: true, requestHeader: false, requestBody: true, responseBody: true, error: true, logPrint: (obj) => logger.i(obj)),
+        LogInterceptor(
+          request: true,
+          requestHeader: false,
+          requestBody: true,
+          responseBody: true,
+          error: true,
+          logPrint: (obj) => logger.i(obj),
+        ),
       );
     }
 
@@ -30,5 +46,8 @@ abstract class AppModule {
   }
 
   @lazySingleton
-  GithubApiService githubApiService(Dio dio) => GithubApiService(dio);
+  GithubRepoApiService githubRepoApiService(Dio dio) => GithubRepoApiService(dio);
+
+  @lazySingleton
+  GithubUsersApiService githubUsersApiService(Dio dio) => GithubUsersApiService(dio);
 }

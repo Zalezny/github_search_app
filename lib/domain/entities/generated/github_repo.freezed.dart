@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'github_repository.dart';
+part of '../github_repo.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,20 @@ part of 'github_repository.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$GithubRepository {
+mixin _$GithubRepo {
 
  int get id; String get name; String get fullName; String? get description; String get htmlUrl; int get stargazersCount; int get forksCount; String get language; GithubOwner get owner; String? get updatedAt;
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$GithubRepositoryCopyWith<GithubRepository> get copyWith => _$GithubRepositoryCopyWithImpl<GithubRepository>(this as GithubRepository, _$identity);
+$GithubRepoCopyWith<GithubRepo> get copyWith => _$GithubRepoCopyWithImpl<GithubRepo>(this as GithubRepo, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GithubRepository&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.description, description) || other.description == description)&&(identical(other.htmlUrl, htmlUrl) || other.htmlUrl == htmlUrl)&&(identical(other.stargazersCount, stargazersCount) || other.stargazersCount == stargazersCount)&&(identical(other.forksCount, forksCount) || other.forksCount == forksCount)&&(identical(other.language, language) || other.language == language)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GithubRepo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.description, description) || other.description == description)&&(identical(other.htmlUrl, htmlUrl) || other.htmlUrl == htmlUrl)&&(identical(other.stargazersCount, stargazersCount) || other.stargazersCount == stargazersCount)&&(identical(other.forksCount, forksCount) || other.forksCount == forksCount)&&(identical(other.language, language) || other.language == language)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
@@ -34,15 +34,15 @@ int get hashCode => Object.hash(runtimeType,id,name,fullName,description,htmlUrl
 
 @override
 String toString() {
-  return 'GithubRepository(id: $id, name: $name, fullName: $fullName, description: $description, htmlUrl: $htmlUrl, stargazersCount: $stargazersCount, forksCount: $forksCount, language: $language, owner: $owner, updatedAt: $updatedAt)';
+  return 'GithubRepo(id: $id, name: $name, fullName: $fullName, description: $description, htmlUrl: $htmlUrl, stargazersCount: $stargazersCount, forksCount: $forksCount, language: $language, owner: $owner, updatedAt: $updatedAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $GithubRepositoryCopyWith<$Res>  {
-  factory $GithubRepositoryCopyWith(GithubRepository value, $Res Function(GithubRepository) _then) = _$GithubRepositoryCopyWithImpl;
+abstract mixin class $GithubRepoCopyWith<$Res>  {
+  factory $GithubRepoCopyWith(GithubRepo value, $Res Function(GithubRepo) _then) = _$GithubRepoCopyWithImpl;
 @useResult
 $Res call({
  int id, String name, String fullName, String? description, String htmlUrl, int stargazersCount, int forksCount, String language, GithubOwner owner, String? updatedAt
@@ -53,14 +53,14 @@ $GithubOwnerCopyWith<$Res> get owner;
 
 }
 /// @nodoc
-class _$GithubRepositoryCopyWithImpl<$Res>
-    implements $GithubRepositoryCopyWith<$Res> {
-  _$GithubRepositoryCopyWithImpl(this._self, this._then);
+class _$GithubRepoCopyWithImpl<$Res>
+    implements $GithubRepoCopyWith<$Res> {
+  _$GithubRepoCopyWithImpl(this._self, this._then);
 
-  final GithubRepository _self;
-  final $Res Function(GithubRepository) _then;
+  final GithubRepo _self;
+  final $Res Function(GithubRepo) _then;
 
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? fullName = null,Object? description = freezed,Object? htmlUrl = null,Object? stargazersCount = null,Object? forksCount = null,Object? language = null,Object? owner = null,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
@@ -77,7 +77,7 @@ as GithubOwner,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // 
 as String?,
   ));
 }
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -90,8 +90,8 @@ $GithubOwnerCopyWith<$Res> get owner {
 }
 
 
-/// Adds pattern-matching-related methods to [GithubRepository].
-extension GithubRepositoryPatterns on GithubRepository {
+/// Adds pattern-matching-related methods to [GithubRepo].
+extension GithubRepoPatterns on GithubRepo {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -104,10 +104,10 @@ extension GithubRepositoryPatterns on GithubRepository {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GithubRepository value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GithubRepo value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _GithubRepository() when $default != null:
+case _GithubRepo() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -126,10 +126,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GithubRepository value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GithubRepo value)  $default,){
 final _that = this;
 switch (_that) {
-case _GithubRepository():
+case _GithubRepo():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -147,10 +147,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GithubRepository value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GithubRepo value)?  $default,){
 final _that = this;
 switch (_that) {
-case _GithubRepository() when $default != null:
+case _GithubRepo() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -170,7 +170,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String fullName,  String? description,  String htmlUrl,  int stargazersCount,  int forksCount,  String language,  GithubOwner owner,  String? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _GithubRepository() when $default != null:
+case _GithubRepo() when $default != null:
 return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlUrl,_that.stargazersCount,_that.forksCount,_that.language,_that.owner,_that.updatedAt);case _:
   return orElse();
 
@@ -191,7 +191,7 @@ return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlU
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String fullName,  String? description,  String htmlUrl,  int stargazersCount,  int forksCount,  String language,  GithubOwner owner,  String? updatedAt)  $default,) {final _that = this;
 switch (_that) {
-case _GithubRepository():
+case _GithubRepo():
 return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlUrl,_that.stargazersCount,_that.forksCount,_that.language,_that.owner,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
@@ -211,7 +211,7 @@ return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlU
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String fullName,  String? description,  String htmlUrl,  int stargazersCount,  int forksCount,  String language,  GithubOwner owner,  String? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
-case _GithubRepository() when $default != null:
+case _GithubRepo() when $default != null:
 return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlUrl,_that.stargazersCount,_that.forksCount,_that.language,_that.owner,_that.updatedAt);case _:
   return null;
 
@@ -223,8 +223,8 @@ return $default(_that.id,_that.name,_that.fullName,_that.description,_that.htmlU
 /// @nodoc
 
 
-class _GithubRepository implements GithubRepository {
-  const _GithubRepository({required this.id, required this.name, required this.fullName, required this.description, required this.htmlUrl, required this.stargazersCount, required this.forksCount, required this.language, required this.owner, required this.updatedAt});
+class _GithubRepo implements GithubRepo {
+  const _GithubRepo({required this.id, required this.name, required this.fullName, required this.description, required this.htmlUrl, required this.stargazersCount, required this.forksCount, required this.language, required this.owner, required this.updatedAt});
   
 
 @override final  int id;
@@ -238,17 +238,17 @@ class _GithubRepository implements GithubRepository {
 @override final  GithubOwner owner;
 @override final  String? updatedAt;
 
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$GithubRepositoryCopyWith<_GithubRepository> get copyWith => __$GithubRepositoryCopyWithImpl<_GithubRepository>(this, _$identity);
+_$GithubRepoCopyWith<_GithubRepo> get copyWith => __$GithubRepoCopyWithImpl<_GithubRepo>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GithubRepository&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.description, description) || other.description == description)&&(identical(other.htmlUrl, htmlUrl) || other.htmlUrl == htmlUrl)&&(identical(other.stargazersCount, stargazersCount) || other.stargazersCount == stargazersCount)&&(identical(other.forksCount, forksCount) || other.forksCount == forksCount)&&(identical(other.language, language) || other.language == language)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GithubRepo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.description, description) || other.description == description)&&(identical(other.htmlUrl, htmlUrl) || other.htmlUrl == htmlUrl)&&(identical(other.stargazersCount, stargazersCount) || other.stargazersCount == stargazersCount)&&(identical(other.forksCount, forksCount) || other.forksCount == forksCount)&&(identical(other.language, language) || other.language == language)&&(identical(other.owner, owner) || other.owner == owner)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
@@ -257,15 +257,15 @@ int get hashCode => Object.hash(runtimeType,id,name,fullName,description,htmlUrl
 
 @override
 String toString() {
-  return 'GithubRepository(id: $id, name: $name, fullName: $fullName, description: $description, htmlUrl: $htmlUrl, stargazersCount: $stargazersCount, forksCount: $forksCount, language: $language, owner: $owner, updatedAt: $updatedAt)';
+  return 'GithubRepo(id: $id, name: $name, fullName: $fullName, description: $description, htmlUrl: $htmlUrl, stargazersCount: $stargazersCount, forksCount: $forksCount, language: $language, owner: $owner, updatedAt: $updatedAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$GithubRepositoryCopyWith<$Res> implements $GithubRepositoryCopyWith<$Res> {
-  factory _$GithubRepositoryCopyWith(_GithubRepository value, $Res Function(_GithubRepository) _then) = __$GithubRepositoryCopyWithImpl;
+abstract mixin class _$GithubRepoCopyWith<$Res> implements $GithubRepoCopyWith<$Res> {
+  factory _$GithubRepoCopyWith(_GithubRepo value, $Res Function(_GithubRepo) _then) = __$GithubRepoCopyWithImpl;
 @override @useResult
 $Res call({
  int id, String name, String fullName, String? description, String htmlUrl, int stargazersCount, int forksCount, String language, GithubOwner owner, String? updatedAt
@@ -276,17 +276,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$GithubRepositoryCopyWithImpl<$Res>
-    implements _$GithubRepositoryCopyWith<$Res> {
-  __$GithubRepositoryCopyWithImpl(this._self, this._then);
+class __$GithubRepoCopyWithImpl<$Res>
+    implements _$GithubRepoCopyWith<$Res> {
+  __$GithubRepoCopyWithImpl(this._self, this._then);
 
-  final _GithubRepository _self;
-  final $Res Function(_GithubRepository) _then;
+  final _GithubRepo _self;
+  final $Res Function(_GithubRepo) _then;
 
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? fullName = null,Object? description = freezed,Object? htmlUrl = null,Object? stargazersCount = null,Object? forksCount = null,Object? language = null,Object? owner = null,Object? updatedAt = freezed,}) {
-  return _then(_GithubRepository(
+  return _then(_GithubRepo(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
@@ -301,7 +301,7 @@ as String?,
   ));
 }
 
-/// Create a copy of GithubRepository
+/// Create a copy of GithubRepo
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

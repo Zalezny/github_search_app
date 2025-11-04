@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../domain/entities/github_user_detail.dart';
+import 'package:github_search_app/domain/entities/github_user_detail.dart';
 
-part 'github_user_detail_dto.freezed.dart';
-part 'github_user_detail_dto.g.dart';
+part 'generated/github_user_detail_dto.freezed.dart';
+part 'generated/github_user_detail_dto.g.dart';
 
 @freezed
 abstract class GithubUserDetailDto with _$GithubUserDetailDto {
@@ -26,7 +26,8 @@ abstract class GithubUserDetailDto with _$GithubUserDetailDto {
     @JsonKey(name: 'created_at') required String createdAt,
   }) = _GithubUserDetailDto;
 
-  factory GithubUserDetailDto.fromJson(Map<String, dynamic> json) => _$GithubUserDetailDtoFromJson(json);
+  factory GithubUserDetailDto.fromJson(Map<String, dynamic> json) =>
+      _$GithubUserDetailDtoFromJson(json);
 
   GithubUserDetail toDomain() {
     return GithubUserDetail(
