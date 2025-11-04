@@ -23,6 +23,14 @@ import 'package:github_search_app/domain/repositories/github_repo_repository_int
     as _i673;
 import 'package:github_search_app/domain/repositories/github_users_repository_interface.dart'
     as _i922;
+import 'package:github_search_app/presentation/app/cubit/home_cubit.dart'
+    as _i501;
+import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart'
+    as _i834;
+import 'package:github_search_app/presentation/results/cubit/results_cubit.dart'
+    as _i363;
+import 'package:github_search_app/presentation/search/cubit/search_cubit.dart'
+    as _i1010;
 import 'package:github_search_app/settings/app_module.dart' as _i256;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:logger/logger.dart' as _i974;
@@ -35,6 +43,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final appModule = _$AppModule();
+    gh.factory<_i1010.SearchCubit>(() => _i1010.SearchCubit());
     gh.lazySingleton<_i974.Logger>(() => appModule.logger());
     gh.lazySingleton<_i361.Dio>(() => appModule.dio(gh<_i974.Logger>()));
     gh.lazySingleton<_i792.GithubRepoApiService>(
@@ -48,6 +57,21 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i922.IGithubUsersRepository>(
       () => _i985.GithubUsersRepositoryImpl(gh<_i537.GithubUsersApiService>()),
+    );
+    gh.factory<_i501.HomeCubit>(
+      () => _i501.HomeCubit(
+        gh<_i673.IGithubRepoRepository>(),
+        gh<_i922.IGithubUsersRepository>(),
+      ),
+    );
+    gh.factory<_i363.ResultsCubit>(
+      () => _i363.ResultsCubit(
+        gh<_i673.IGithubRepoRepository>(),
+        gh<_i922.IGithubUsersRepository>(),
+      ),
+    );
+    gh.factory<_i834.DetailCubit>(
+      () => _i834.DetailCubit(gh<_i922.IGithubUsersRepository>()),
     );
     return this;
   }
