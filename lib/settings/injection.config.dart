@@ -23,12 +23,16 @@ import 'package:github_search_app/domain/repositories/github_repo_repository_int
     as _i673;
 import 'package:github_search_app/domain/repositories/github_users_repository_interface.dart'
     as _i922;
+import 'package:github_search_app/domain/usecases/get_user_details_usecase.dart'
+    as _i560;
+import 'package:github_search_app/domain/usecases/search_repositories_usecase.dart'
+    as _i643;
+import 'package:github_search_app/domain/usecases/search_users_usecase.dart'
+    as _i564;
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart'
     as _i501;
 import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart'
     as _i834;
-import 'package:github_search_app/presentation/results/cubit/results_cubit.dart'
-    as _i363;
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart'
     as _i1010;
 import 'package:github_search_app/settings/app_module.dart' as _i256;
@@ -58,20 +62,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i922.IGithubUsersRepository>(
       () => _i985.GithubUsersRepositoryImpl(gh<_i537.GithubUsersApiService>()),
     );
-    gh.factory<_i501.HomeCubit>(
-      () => _i501.HomeCubit(
-        gh<_i673.IGithubRepoRepository>(),
-        gh<_i922.IGithubUsersRepository>(),
-      ),
+    gh.factory<_i643.SearchRepositoriesUseCase>(
+      () => _i643.SearchRepositoriesUseCase(gh<_i673.IGithubRepoRepository>()),
     );
-    gh.factory<_i363.ResultsCubit>(
-      () => _i363.ResultsCubit(
-        gh<_i673.IGithubRepoRepository>(),
-        gh<_i922.IGithubUsersRepository>(),
-      ),
+    gh.factory<_i560.GetUserDetailsUseCase>(
+      () => _i560.GetUserDetailsUseCase(gh<_i922.IGithubUsersRepository>()),
+    );
+    gh.factory<_i564.SearchUsersUseCase>(
+      () => _i564.SearchUsersUseCase(gh<_i922.IGithubUsersRepository>()),
     );
     gh.factory<_i834.DetailCubit>(
-      () => _i834.DetailCubit(gh<_i922.IGithubUsersRepository>()),
+      () => _i834.DetailCubit(gh<_i560.GetUserDetailsUseCase>()),
+    );
+    gh.factory<_i501.HomeCubit>(
+      () => _i501.HomeCubit(
+        gh<_i643.SearchRepositoriesUseCase>(),
+        gh<_i564.SearchUsersUseCase>(),
+      ),
     );
     return this;
   }

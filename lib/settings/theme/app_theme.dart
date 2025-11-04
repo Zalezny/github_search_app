@@ -1,84 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:github_search_app/settings/theme/app_colors.dart';
 
 class AppTheme {
-  // Dark theme colors matching globals.css
-  static const Color background = Color(0xFF1A1A1A); // oklch(0.1 0 0)
-  static const Color foreground = Color(0xFFF2F2F2); // oklch(0.95 0 0)
-  static const Color card = Color(0xFF262626); // oklch(0.15 0 0)
-  static const Color cardForeground = Color(0xFFF2F2F2);
+  // Re-export colors for backward compatibility
+  static const Color background = AppColors.background;
+  static const Color foreground = AppColors.foreground;
+  static const Color card = AppColors.card;
+  static const Color cardForeground = AppColors.cardForeground;
 
-  // Primary - cyan/blue accent oklch(0.65 0.2 230)
-  static const Color primary = Color(0xFF3B82F6); // Blue-ish cyan
-  static const Color primaryForeground = Color(0xFF1A1A1A);
+  static const Color primary = AppColors.primary;
+  static const Color primaryForeground = AppColors.primaryForeground;
 
-  static const Color secondary = Color(0xFF333333); // oklch(0.2 0 0)
-  static const Color secondaryForeground = Color(0xFFF2F2F2);
+  static const Color secondary = AppColors.secondary;
+  static const Color secondaryForeground = AppColors.secondaryForeground;
 
-  static const Color muted = Color(0xFF404040); // oklch(0.25 0 0)
-  static const Color mutedForeground = Color(0xFFA6A6A6); // oklch(0.65 0 0)
+  static const Color muted = AppColors.muted;
+  static const Color mutedForeground = AppColors.mutedForeground;
 
-  static const Color border = Color(0xFF404040);
-  static const Color input = Color(0xFF333333);
+  static const Color border = AppColors.border;
+  static const Color input = AppColors.input;
 
-  // Gradient colors for categories
-  static const Color blueGradientStart = Color(0xFF3B82F6);
-  static const Color blueGradientEnd = Color(0xFF06B6D4);
+  static const Color blueGradientStart = AppColors.blueGradientStart;
+  static const Color blueGradientEnd = AppColors.blueGradientEnd;
 
-  static const Color purpleGradientStart = Color(0xFFA855F7);
-  static const Color purpleGradientEnd = Color(0xFFEC4899);
+  static const Color purpleGradientStart = AppColors.purpleGradientStart;
+  static const Color purpleGradientEnd = AppColors.purpleGradientEnd;
 
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: background,
+      scaffoldBackgroundColor: AppColors.background,
       colorScheme: const ColorScheme.dark(
-        surface: background,
-        onSurface: foreground,
-        primary: primary,
-        onPrimary: primaryForeground,
-        secondary: secondary,
-        onSecondary: secondaryForeground,
-        tertiary: card,
-        onTertiary: cardForeground,
-        outline: border,
-        outlineVariant: muted,
+        surface: AppColors.background,
+        onSurface: AppColors.foreground,
+        primary: AppColors.primary,
+        onPrimary: AppColors.primaryForeground,
+        secondary: AppColors.secondary,
+        onSecondary: AppColors.secondaryForeground,
+        tertiary: AppColors.card,
+        onTertiary: AppColors.cardForeground,
+        outline: AppColors.border,
+        outlineVariant: AppColors.muted,
       ),
       cardTheme: CardThemeData(
-        color: card,
+        color: AppColors.card,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: card,
+        fillColor: AppColors.card,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: border),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: border),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: primary, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontSize: 48,
           fontWeight: FontWeight.bold,
-          color: foreground,
+          color: AppColors.foreground,
           height: 1.2,
         ),
-        headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: foreground),
-        bodyLarge: TextStyle(fontSize: 16, color: foreground),
-        bodyMedium: TextStyle(fontSize: 14, color: mutedForeground),
+        headlineMedium: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: AppColors.foreground,
+        ),
+        bodyLarge: TextStyle(fontSize: 16, color: AppColors.foreground),
+        bodyMedium: TextStyle(fontSize: 14, color: AppColors.mutedForeground),
         labelSmall: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: mutedForeground,
+          color: AppColors.mutedForeground,
           letterSpacing: 1.2,
         ),
       ),

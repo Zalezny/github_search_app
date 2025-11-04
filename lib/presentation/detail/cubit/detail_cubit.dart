@@ -1,14 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
-import 'package:github_search_app/domain/repositories/github_users_repository_interface.dart';
+import 'package:github_search_app/domain/usecases/get_user_details_usecase.dart';
 import 'package:github_search_app/presentation/detail/cubit/detail_state.dart';
 import 'package:injectable/injectable.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @injectable
 class DetailCubit extends Cubit<DetailState> {
-  final IGithubUsersRepository _usersRepository;
+  final GetUserDetailsUseCase _getUserDetailsUseCase;
 
-  DetailCubit(this._usersRepository) : super(const DetailState());
+  DetailCubit(this._getUserDetailsUseCase) : super(const DetailState());
 
   void setItem(dynamic item) {
     emit(state.copyWith(item: item));
@@ -17,7 +18,7 @@ class DetailCubit extends Cubit<DetailState> {
   Future<void> loadUserDetails(String username) async {
     emit(state.copyWith(isLoading: true, error: null));
 
-    final result = await _usersRepository.getUserDetails(username: username);
+    final result = await _getUserDetailsUseCase(username: username);
 
     result.fold(
       (error) {
@@ -39,5 +40,17 @@ class DetailCubit extends Cubit<DetailState> {
 
   void reset() {
     emit(const DetailState());
+  }
+
+  Future<bool> openUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (!(await launchUrl(uri, mode: LaunchMode.inAppBrowserView))) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

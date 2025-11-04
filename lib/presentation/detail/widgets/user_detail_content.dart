@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/core/utils/format_utils.dart';
 import 'package:github_search_app/domain/entities/github_user_detail.dart';
+import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart';
 import 'package:github_search_app/presentation/detail/widgets/gradient_action_button.dart';
 import 'package:github_search_app/presentation/detail/widgets/hero_section.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
@@ -105,14 +107,28 @@ class UserDetailContent extends StatelessWidget {
                 const SizedBox(height: 12),
                 InfoCardRow(icon: Icons.email, label: 'Email', value: user.email!),
               ],
-              if (user.blog != null) ...[
+              if (user.blog != null && user.blog!.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 InfoCardRow(icon: Icons.link, label: 'Blog', value: user.blog!),
               ],
 
               const SizedBox(height: 20),
               GradientActionButton(
-                onTap: () {},
+                onTap: () async {
+                  final cubit = context.read<DetailCubit>();
+                  final success = await cubit.openUrl(user.htmlUrl);
+
+                  if (!success && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Unable to open GitHub URL'),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
                 category: category,
                 text: 'View on GitHub',
                 icon: Icons.open_in_new,

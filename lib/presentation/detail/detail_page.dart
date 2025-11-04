@@ -3,7 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/domain/entities/github_repo.dart';
 import 'package:github_search_app/domain/entities/github_user_detail.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
+import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart';
+import 'package:github_search_app/presentation/detail/cubit/detail_state.dart';
+import 'package:github_search_app/settings/injection.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_colors.dart';
 import 'package:github_search_app/presentation/search/search_page.dart';
 import 'package:github_search_app/presentation/detail/widgets/detail_header.dart';
 import 'package:github_search_app/presentation/detail/widgets/repo_detail_content.dart';
@@ -59,42 +63,64 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppTheme.background, AppTheme.background, AppTheme.card],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              DetailHeader(
-                onBack: () => context.read<HomeCubit>().backToResults(),
-                animation: _animationController,
-              ),
-              Expanded(
-                child: widget.category == SearchCategory.repos
-                    ? RepoDetailContent(
-                        repo: widget.item as GithubRepo,
-                        fadeAnimation: _fadeAnimation,
-                        slideAnimation: _slideAnimation,
-                        avatarScale: _avatarScale,
-                        gradientColors: _heroColors(),
-                        category: widget.category,
-                      )
-                    : UserDetailContent(
-                        user: widget.item as GithubUserDetail,
-                        fadeAnimation: _fadeAnimation,
-                        slideAnimation: _slideAnimation,
-                        avatarScale: _avatarScale,
-                        gradientColors: _heroColors(),
-                        category: widget.category,
-                      ),
-              ),
-            ],
+    return BlocProvider(
+      create: (context) => getIt<DetailCubit>()..loadItemDetails(widget.item),
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+          child: SafeArea(
+            child: Column(
+              children: [
+                DetailHeader(
+                  onBack: () => context.read<HomeCubit>().backToResults(),
+                  animation: _animationController,
+                ),
+                Expanded(
+                  child: BlocBuilder<DetailCubit, DetailState>(
+                    builder: (context, state) {
+                      if (state.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state.error != null) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
+                              const SizedBox(height: 16),
+                              Text(
+                                state.error!,
+                                style: const TextStyle(color: Colors.white70),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return widget.category == SearchCategory.repos
+                          ? RepoDetailContent(
+                              repo: state.item as GithubRepo,
+                              fadeAnimation: _fadeAnimation,
+                              slideAnimation: _slideAnimation,
+                              avatarScale: _avatarScale,
+                              gradientColors: _heroColors(),
+                              category: widget.category,
+                            )
+                          : UserDetailContent(
+                              user: state.item as GithubUserDetail,
+                              fadeAnimation: _fadeAnimation,
+                              slideAnimation: _slideAnimation,
+                              avatarScale: _avatarScale,
+                              gradientColors: _heroColors(),
+                              category: widget.category,
+                            );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

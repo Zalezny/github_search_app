@@ -4,18 +4,22 @@ import 'package:github_search_app/domain/entities/github_repo.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_colors.dart';
 import 'package:github_search_app/presentation/search/search_page.dart';
 import 'package:github_search_app/presentation/results/widgets/loading_view.dart';
 import 'package:github_search_app/presentation/results/widgets/error_view.dart';
 import 'package:github_search_app/presentation/results/widgets/empty_view.dart';
 import 'package:github_search_app/presentation/results/widgets/repo_card.dart';
 import 'package:github_search_app/presentation/results/widgets/user_card.dart';
+import 'package:github_search_app/presentation/results/widgets/results_header.dart';
 
 class ResultsListPage extends StatefulWidget {
   final List<dynamic> results; // List<GithubRepo> or List<GithubUser>
   final String query;
   final SearchCategory category;
   final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMorePages;
   final String? error;
 
   const ResultsListPage({
@@ -24,6 +28,8 @@ class ResultsListPage extends StatefulWidget {
     required this.query,
     required this.category,
     required this.isLoading,
+    required this.isLoadingMore,
+    required this.hasMorePages,
     required this.error,
   });
 
@@ -33,16 +39,26 @@ class ResultsListPage extends StatefulWidget {
 
 class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this, duration: AppTheme.slowAnimation);
     _animationController.forward();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.7) {
+      context.read<HomeCubit>().loadMoreResults();
+    }
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -51,17 +67,15 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppTheme.background, AppTheme.background, AppTheme.card],
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: Column(
             children: [
-              _buildHeader(),
+              ResultsHeader(
+                animationController: _animationController,
+                query: widget.query,
+                category: widget.category,
+              ),
               if (widget.isLoading)
                 const Expanded(child: LoadingView())
               else if (widget.error != null)
@@ -82,50 +96,49 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
     );
   }
 
-  Widget _buildHeader() {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, -0.2),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOut)),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () => context.read<HomeCubit>().backToSearch(),
-              color: AppTheme.foreground,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Search Results', style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: 4),
-                  Text(
-                    '"${widget.query}" • ${widget.category == SearchCategory.repos ? 'Repositories' : 'Users'}',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: AppTheme.mutedForeground),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildResultsList() {
+    final itemCount = widget.results.length + (widget.isLoadingMore || widget.hasMorePages ? 1 : 0);
+
     return ListView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: widget.results.length,
+      itemCount: itemCount,
       itemBuilder: (context, index) {
+        // Show loading indicator at the bottom
+        if (index == widget.results.length) {
+          if (widget.isLoadingMore) {
+            return _buildLoadingMoreIndicator();
+          } else if (widget.hasMorePages) {
+            return const SizedBox(height: 80);
+          } else {
+            return const SizedBox.shrink();
+          }
+        }
+
         final item = widget.results[index];
+
+        // Disable animation for items loaded via pagination (index >= 20)
+        final shouldAnimate = index < 20;
+
+        if (!shouldAnimate) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: widget.category == SearchCategory.repos
+                ? RepoCard(
+                    repo: item as GithubRepo,
+                    onTap: () {
+                      context.read<HomeCubit>().selectResult(item);
+                    },
+                    formatNumber: _formatNumber,
+                  )
+                : UserCard(
+                    user: item as GithubUser,
+                    onTap: () {
+                      context.read<HomeCubit>().selectResult(item);
+                    },
+                  ),
+          );
+        }
 
         return TweenAnimationBuilder<double>(
           tween: Tween(begin: 0, end: 1),
@@ -142,30 +155,47 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
             child: widget.category == SearchCategory.repos
                 ? RepoCard(
                     repo: item as GithubRepo,
-                    onTap: () async {
-                      final error = await context.read<HomeCubit>().selectResult(item);
-                      if (error != null && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: $error'), backgroundColor: Colors.red),
-                        );
-                      }
+                    onTap: () {
+                      context.read<HomeCubit>().selectResult(item);
                     },
                     formatNumber: _formatNumber,
                   )
                 : UserCard(
                     user: item as GithubUser,
-                    onTap: () async {
-                      final error = await context.read<HomeCubit>().selectResult(item);
-                      if (error != null && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: $error'), backgroundColor: Colors.red),
-                        );
-                      }
+                    onTap: () {
+                      context.read<HomeCubit>().selectResult(item);
                     },
                   ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildLoadingMoreIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Loading new elements...',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mutedForeground),
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 

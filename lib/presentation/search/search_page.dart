@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
+import 'package:github_search_app/presentation/app/cubit/home_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_colors.dart';
+import 'package:github_search_app/presentation/search/widgets/animated_search_field.dart';
 
 enum SearchCategory { repos, users }
 
@@ -27,15 +30,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   late Animation<double> _headerFadeAnimation;
   late Animation<Offset> _searchBarSlideAnimation;
   late Animation<Offset> _categorySlideAnimation;
-  late Animation<double> _tagsFadeAnimation;
 
-  final List<String> _quickSearchTags = [
-    'Next.js',
-    'React',
-    'TypeScript',
-    'Web Design',
-    'AI Tools',
+  // Quick search tags for repositories
+  final List<String> _repoQuickSearchTags = ['Flutter', 'AI', 'Next.js', 'React', 'TypeScript'];
+
+  // Quick search tags for users (top GitHub accounts)
+  final List<String> _userQuickSearchTags = [
+    'Zalezny',
+    'torvalds',
+    'gaearon',
+    'tj',
+    'sindresorhus',
+    'addyosmani',
   ];
+
+  List<String> get _quickSearchTags =>
+      _selectedCategory == SearchCategory.repos ? _repoQuickSearchTags : _userQuickSearchTags;
 
   @override
   void initState() {
@@ -77,12 +87,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _categoryAnimationController, curve: Curves.easeOut));
 
-    // Tags animation
+    // Tags animation controller for restarting animation on category change
     _tagsAnimationController = AnimationController(vsync: this, duration: AppTheme.normalAnimation);
-    _tagsFadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _tagsAnimationController, curve: Curves.easeIn));
   }
 
   void _startAnimations() async {
@@ -122,31 +128,19 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppTheme.background, AppTheme.background, AppTheme.card],
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Header
-              _buildHeader(),
-
-              // Search Bar
-              _buildSearchBar(),
-
-              // Category Selection
-              _buildCategorySelection(),
-
-              // Quick Search Tags
-              Expanded(child: _buildQuickSearchTags()),
-
-              const SizedBox(height: 80),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildHeader(),
+                _buildSearchBar(),
+                _buildCategorySelection(),
+                _buildQuickSearchTags(),
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
       ),
@@ -191,54 +185,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   }
 
   Widget _buildSearchBar() {
-    return SlideTransition(
-      position: _searchBarSlideAnimation,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: AnimatedContainer(
-          duration: AppTheme.normalAnimation,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _isFocused ? AppTheme.primary : AppTheme.border,
-              width: _isFocused ? 2 : 1,
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return SlideTransition(
+          position: _searchBarSlideAnimation,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: AnimatedSearchField(
+              controller: _searchController,
+              focusNode: _focusNode,
+              isFocused: _isFocused,
+              isLoading: state.isLoading && state.currentPage == AppPage.search,
+              onSubmit: _handleSubmit,
             ),
-            boxShadow: _isFocused
-                ? [
-                    BoxShadow(
-                      color: AppTheme.primary.withValues(alpha: 0.2),
-                      blurRadius: 12,
-                      spreadRadius: 2,
-                    ),
-                  ]
-                : [],
           ),
-          child: TextField(
-            controller: _searchController,
-            focusNode: _focusNode,
-            style: const TextStyle(color: AppTheme.foreground, fontSize: 16),
-            decoration: InputDecoration(
-              hintText: 'Search repositories or developers...',
-              hintStyle: TextStyle(color: AppTheme.mutedForeground, fontSize: 16),
-              prefixIcon: AnimatedContainer(
-                duration: AppTheme.normalAnimation,
-                child: Icon(
-                  Icons.search,
-                  color: _isFocused ? AppTheme.primary : AppTheme.mutedForeground,
-                ),
-              ),
-              filled: true,
-              fillColor: AppTheme.card,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            ),
-            onSubmitted: (_) => _handleSubmit(),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -304,15 +266,33 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       onTap: () {
         setState(() {
           _selectedCategory = category;
+          // Restart tags animation when category changes
+          _tagsAnimationController.reset();
+          _tagsAnimationController.forward();
         });
       },
     );
   }
 
   Widget _buildQuickSearchTags() {
-    return FadeTransition(
-      opacity: _tagsFadeAnimation,
-      child: SingleChildScrollView(
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.1),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        key: ValueKey(_selectedCategory),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,12 +304,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               runSpacing: 8,
               children: _quickSearchTags.asMap().entries.map((entry) {
                 return TweenAnimationBuilder<double>(
+                  key: ValueKey('${_selectedCategory}_${entry.value}'),
                   tween: Tween(begin: 0, end: 1),
-                  duration: Duration(milliseconds: 300 + (entry.key * 50)),
+                  duration: Duration(milliseconds: 300 + (entry.key * 40)),
                   curve: Curves.easeOut,
                   builder: (context, value, child) {
                     return Transform.translate(
-                      offset: Offset(0, 20 * (1 - value)),
+                      offset: Offset(0, 10 * (1 - value)),
                       child: Opacity(opacity: value, child: child),
                     );
                   },
@@ -350,6 +331,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         setState(() {
           _searchController.text = tag;
         });
+        // Automatically start search after setting the tag
+        _handleSubmit();
       },
     );
   }
@@ -376,12 +359,12 @@ class _AnimatedQuickSearchTagState extends State<_AnimatedQuickSearchTag>
     super.initState();
     _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 150),
     );
     _scaleAnimation = Tween<double>(
       begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut));
+      end: 0.92,
+    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeInOutCubic));
   }
 
   @override
@@ -499,11 +482,11 @@ class _AnimatedCategoryCardState extends State<_AnimatedCategoryCard>
     super.initState();
     _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 200),
     );
     _scaleAnimation = Tween<double>(
       begin: 1.0,
-      end: 0.97,
+      end: 0.95,
     ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut));
   }
 
@@ -535,7 +518,7 @@ class _AnimatedCategoryCardState extends State<_AnimatedCategoryCard>
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: AnimatedContainer(
-          duration: AppTheme.normalAnimation,
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
           height: 180,
           decoration: BoxDecoration(
@@ -563,46 +546,53 @@ class _AnimatedCategoryCardState extends State<_AnimatedCategoryCard>
                 : [],
           ),
           child: Stack(
+            alignment: Alignment.center,
             children: [
               // Content
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AnimatedContainer(
-                      duration: AppTheme.normalAnimation,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: widget.isSelected ? 0.2 : 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: widget.isSelected ? 0.2 : 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          widget.icon,
+                          size: 32,
+                          color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                        ),
                       ),
-                      child: Icon(
-                        widget.icon,
-                        size: 32,
-                        color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                      const SizedBox(height: 12),
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.description,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: widget.isSelected
+                              ? Colors.white.withValues(alpha: 0.8)
+                              : AppTheme.mutedForeground,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: widget.isSelected
-                            ? Colors.white.withValues(alpha: 0.8)
-                            : AppTheme.mutedForeground,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               // Selected indicator

@@ -14,6 +14,9 @@ abstract class HomeState with _$HomeState {
     @Default([]) List<dynamic> results,
     dynamic selectedItem,
     @Default(false) bool isLoading,
+    @Default(false) bool isLoadingMore,
+    @Default(1) int pageNumber,
+    @Default(true) bool hasMorePages,
     String? error,
   }) = _HomeState;
 }

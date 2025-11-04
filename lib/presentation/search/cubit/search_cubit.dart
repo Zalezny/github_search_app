@@ -14,7 +14,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(searchQuery: query));
   }
 
-  void resetSearch() {
+void resetSearch() {
     emit(const SearchState());
   }
 }

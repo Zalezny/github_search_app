@@ -1,17 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_search_app/domain/entities/github_user.dart';
-import 'package:github_search_app/domain/repositories/github_repo_repository_interface.dart';
-import 'package:github_search_app/domain/repositories/github_users_repository_interface.dart';
+import 'package:github_search_app/domain/usecases/search_repositories_usecase.dart';
+import 'package:github_search_app/domain/usecases/search_users_usecase.dart';
 import 'package:github_search_app/presentation/app/cubit/home_state.dart';
 import 'package:github_search_app/presentation/search/search_page.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class HomeCubit extends Cubit<HomeState> {
-  final IGithubRepoRepository _repoRepository;
-  final IGithubUsersRepository _usersRepository;
+  final SearchRepositoriesUseCase _searchRepositoriesUseCase;
+  final SearchUsersUseCase _searchUsersUseCase;
 
-  HomeCubit(this._repoRepository, this._usersRepository) : super(const HomeState());
+  HomeCubit(this._searchRepositoriesUseCase, this._searchUsersUseCase) : super(const HomeState());
 
   Future<void> search(String query, SearchCategory category) async {
     emit(
@@ -21,57 +20,122 @@ class HomeCubit extends Cubit<HomeState> {
         isLoading: true,
         error: null,
         results: [],
+        pageNumber: 1,
+        hasMorePages: true,
       ),
     );
 
     if (category == SearchCategory.repos) {
-      final result = await _repoRepository.searchRepositories(query: query, page: 1, perPage: 20);
+      final result = await _searchRepositoriesUseCase(query: query, page: 1, perPage: 20);
 
       result.fold(
         (error) {
-          emit(state.copyWith(error: error, isLoading: false, currentPage: AppPage.results));
+          emit(
+            state.copyWith(
+              error: error,
+              isLoading: false,
+              currentPage: AppPage.results,
+              hasMorePages: false,
+            ),
+          );
         },
         (repos) {
-          emit(state.copyWith(results: repos, isLoading: false, currentPage: AppPage.results));
+          emit(
+            state.copyWith(
+              results: repos,
+              isLoading: false,
+              currentPage: AppPage.results,
+              hasMorePages: repos.length == 20,
+            ),
+          );
         },
       );
     } else {
-      final result = await _usersRepository.searchUsers(query: query, page: 1, perPage: 20);
+      final result = await _searchUsersUseCase(query: query, page: 1, perPage: 20);
 
       result.fold(
         (error) {
-          emit(state.copyWith(error: error, isLoading: false, currentPage: AppPage.results));
+          emit(
+            state.copyWith(
+              error: error,
+              isLoading: false,
+              currentPage: AppPage.results,
+              hasMorePages: false,
+            ),
+          );
         },
         (users) {
-          emit(state.copyWith(results: users, isLoading: false, currentPage: AppPage.results));
+          emit(
+            state.copyWith(
+              results: users,
+              isLoading: false,
+              currentPage: AppPage.results,
+              hasMorePages: users.length == 20,
+            ),
+          );
         },
       );
     }
   }
 
-  Future<String?> selectResult(dynamic item) async {
-    if (item is GithubUser) {
-      emit(state.copyWith(isLoading: true));
+  Future<void> loadMoreResults() async {
+    if (state.isLoadingMore || !state.hasMorePages) return;
 
-      final result = await _usersRepository.getUserDetails(username: item.login);
+    emit(state.copyWith(isLoadingMore: true));
 
-      return result.fold(
+    final nextPage = state.pageNumber + 1;
+
+    if (state.selectedCategory == SearchCategory.repos) {
+      final result = await _searchRepositoriesUseCase(
+        query: state.searchQuery,
+        page: nextPage,
+        perPage: 20,
+      );
+
+      result.fold(
         (error) {
-          emit(state.copyWith(error: error, isLoading: false));
-          return error; // Return error message to show in snackbar
+          emit(state.copyWith(isLoadingMore: false, error: error));
         },
-        (userDetail) {
+        (repos) {
+          final updatedResults = List<dynamic>.from(state.results)..addAll(repos);
           emit(
-            state.copyWith(selectedItem: userDetail, isLoading: false, currentPage: AppPage.detail),
+            state.copyWith(
+              results: updatedResults,
+              isLoadingMore: false,
+              pageNumber: nextPage,
+              hasMorePages: repos.length == 20,
+            ),
           );
-          return null; // No error
         },
       );
     } else {
-      // It's a repo
-      emit(state.copyWith(selectedItem: item, currentPage: AppPage.detail));
-      return null; // No error
+      final result = await _searchUsersUseCase(
+        query: state.searchQuery,
+        page: nextPage,
+        perPage: 20,
+      );
+
+      result.fold(
+        (error) {
+          emit(state.copyWith(isLoadingMore: false, error: error));
+        },
+        (users) {
+          final updatedResults = List<dynamic>.from(state.results)..addAll(users);
+          emit(
+            state.copyWith(
+              results: updatedResults,
+              isLoadingMore: false,
+              pageNumber: nextPage,
+              hasMorePages: users.length == 20,
+            ),
+          );
+        },
+      );
     }
+  }
+
+  void selectResult(dynamic item) {
+    emit(state.copyWith(selectedItem: item, currentPage: AppPage.detail));
   }
 
   void backToSearch() {

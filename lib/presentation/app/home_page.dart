@@ -12,10 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<HomeCubit>(),
-      child: const _HomePageContent(),
-    );
+    return BlocProvider(create: (context) => getIt<HomeCubit>(), child: const _HomePageContent());
   }
 }
 
@@ -29,12 +26,11 @@ class _HomePageContent extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         // Show error snackbar when user detail loading fails
-        if (state.error != null && state.isLoading == false && state.currentPage != AppPage.results) {
+        if (state.error != null &&
+            state.isLoading == false &&
+            state.currentPage != AppPage.results) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error: ${state.error}'),
-              backgroundColor: Colors.red,
-            ),
+            SnackBar(content: Text('Error: ${state.error}'), backgroundColor: Colors.red),
           );
         }
       },
@@ -77,6 +73,8 @@ class _HomePageContent extends StatelessWidget {
           query: state.searchQuery,
           category: state.selectedCategory,
           isLoading: state.isLoading,
+          isLoadingMore: state.isLoadingMore,
+          hasMorePages: state.hasMorePages,
           error: state.error,
         );
       case AppPage.detail:

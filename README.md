@@ -1,16 +1,211 @@
-# github_search_app
+# GitHub Search App
 
-A new Flutter project.
+Flutter application for searching GitHub repositories and users with detailed information display.
 
-## Getting Started
+## 🚀 Running the Application
 
-This project is a starting point for a Flutter application.
+### Option 1: Run in Development Mode
 
-A few resources to get you started if this is your first Flutter project:
+1. **Install dependencies:**
+   ```bash
+   flutter pub get
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. **Generate code (if needed):**
+   ```bash
+   dart run build_runner build --delete-conflicting-outputs
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. **Run the application:**
+   ```bash
+   flutter run
+   ```
+
+   Or select a specific device:
+   ```bash
+   flutter devices
+   flutter run -d <device-id>
+   ```
+
+### Option 2: Build and Install APK on Android Device
+
+Just use realease.apk in repository
+
+## 📁 Project Structure
+
+The project follows **Clean Architecture** principles with a **layer-first** approach:
+
+```
+lib/
+├── core/                           # Core utilities and helpers
+│   └── utils/                      # Date formatting, number formatting
+│
+├── data/                           # Data Layer
+│   ├── datasources/               # API data sources (Retrofit)
+│   ├── models/                      # Data Transfer Objects (Freezed)
+│   └── repositories/              # Repository implementations
+│
+├── domain/                         # Domain Layer (Business Logic)
+│   ├── entities/                  # Domain models (Freezed)
+│   ├── repositories/              # Repository interfaces
+│   └── usecases/                  # Use cases (business operations)
+│
+├── presentation/                   # Presentation Layer (UI)
+│   ├── app/                       # Main app and navigation cubit
+│   │   └── cubit/                 # HomeCubit (app state management)
+│   ├── search/                    # Search page
+│   │   └── widgets/               # Search page components
+│   │   └── cubit/                 # Cubit page
+│   ├── results/                   # Results list page
+│   │   └── widgets/               # Results page components
+│   │   └── cubit/                 # Cubit page
+│   └── detail/                    # Detail page
+│       ├── cubit/                 # DetailCubit (detail state)
+│       └── widgets/               # Detail page components
+│       └── cubit/                 # Cubit page
+│
+├── settings/                       # App configuration
+│   ├── injection.dart             # Dependency injection setup
+│   ├── app_module.dart            # App Module
+│   ├── routes/                    # Navigation configuration
+│   └── theme/                     # Theme and styling
+│
+└── main.dart                       # Application entry point
+```
+
+### Layer Responsibilities
+
+#### **Data Layer**
+- Handles external data sources (GitHub API)
+- Implements repository interfaces from domain layer
+- Converts DTOs to domain entities
+- Uses Retrofit for API calls and Freezed for immutable DTOs
+
+#### **Domain Layer**
+- Contains business logic and entities
+- Defines repository interfaces
+- Implements use cases (single responsibility operations)
+
+#### **Presentation Layer**
+- UI components and screens
+- Cubits for state management (BLoC pattern)
+- Widgets organized by feature
+
+## State Management & Architecture
+
+### Clean Architecture
+
+The app follows **Clean Architecture** with clear separation of concerns:
+
+1. **Domain Layer** - Pure business logic, no dependencies on external frameworks
+2. **Data Layer** - API communication, data mapping
+3. **Presentation Layer** - UI and user interactions
+
+### BLoC Pattern (Cubit)
+
+State management using **flutter_bloc**:
+
+#### Key Features:
+- Immutable state using Freezed
+- Reactive UI updates
+- Separation of business logic from UI
+
+### Dependency Injection
+
+**Injectable + GetIt** for dependency management:
+
+**Configuration:**
+- `lib/settings/injection.dart` - DI setup
+- Automatic code generation with `injectable_generator`
+
+**Benefits:**
+- Easy testing with mock dependencies
+- Loose coupling between layers
+- Centralized dependency management
+
+### Layer-First Organization
+
+**Advantages:**
+- Clear architectural boundaries
+- Easy to understand data flow
+- Prevents cross-layer dependencies
+
+## 📦 Key Technologies
+
+- **Flutter** - UI framework
+- **flutter_bloc** - State management (Cubit)
+- **Freezed** - Immutable models and unions
+- **Injectable + GetIt** - Dependency injection
+- **Retrofit + Dio** - REST API client
+- **url_launcher** - Open external URLs
+- **Dartz** - Functional programming (Either for error handling)
+
+## 🧪 Tests
+
+The project includes comprehensive unit tests for the data layer.
+
+### Test Files
+
+#### `test/data/repositories/github_repo_repository_impl_test.dart`
+
+**Tests for Repository Search:**
+1. **Success case** - Verifies successful repository search returns mapped entities
+2. **404 Not Found** - Validates handling when no repositories are found
+3. **Generic error handling** - Tests error handling for unexpected failures
+
+**What is tested:**
+- API response to entity mapping
+- Error handling and proper Either<Failure, List<Entity>> returns
+- Repository implementation contract
+
+#### `test/data/repositories/github_user_repository_impl_test.dart`
+
+**Tests for User Search and Details:**
+1. **User search success** - Verifies user search returns mapped entities
+2. **User search 404 error** - Validates not found error handling
+3. **User search generic error** - Tests generic error scenarios
+
+**What is tested:**
+- User search functionality
+- User details fetching
+- Data transformation from DTOs to entities
+- Error propagation
+
+### Test Approach
+
+**Technologies:**
+- `flutter_test` - Testing framework
+- `mocktail` - Mocking dependencies
+- `dartz` - Either type for error handling
+
+**Patterns:**
+- **AAA Pattern** (Arrange, Act, Assert)
+- **Mock dependencies** - API data sources mocked
+- **Isolated tests** - Each test is independent
+
+**Coverage:**
+- Data layer repository implementations
+- Success paths
+- Error scenarios (404, generic errors)
+- Data mapping and transformation
+
+### Running Tests
+
+```bash
+# Run all tests
+flutter test
+
+# Run with coverage
+flutter test --coverage
+
+# Run specific test file
+flutter test test/data/repositories/github_repo_repository_impl_test.dart
+```
+
+## 🔧 Code Generation
+
+The project uses code generation for:
+- **Freezed** - Immutable models, unions, copyWith
+- **Injectable** - Dependency injection setup
+- **Retrofit** - API client generation
+- **JSON Serializable** - JSON serialization
