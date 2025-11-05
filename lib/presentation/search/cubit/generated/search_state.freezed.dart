@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchState {
 
- SearchCategory get selectedCategory; String get searchQuery;
+ SearchCategory get selectedCategory; String get searchQuery; List<dynamic> get results; bool get isLoading; bool get isLoadingMore; int get pageNumber; bool get hasMorePages; String? get error;
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SearchStateCopyWith<SearchState> get copyWith => _$SearchStateCopyWithImpl<Sear
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchState&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchState&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other.results, results)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.pageNumber, pageNumber) || other.pageNumber == pageNumber)&&(identical(other.hasMorePages, hasMorePages) || other.hasMorePages == hasMorePages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedCategory,searchQuery);
+int get hashCode => Object.hash(runtimeType,selectedCategory,searchQuery,const DeepCollectionEquality().hash(results),isLoading,isLoadingMore,pageNumber,hasMorePages,error);
 
 @override
 String toString() {
-  return 'SearchState(selectedCategory: $selectedCategory, searchQuery: $searchQuery)';
+  return 'SearchState(selectedCategory: $selectedCategory, searchQuery: $searchQuery, results: $results, isLoading: $isLoading, isLoadingMore: $isLoadingMore, pageNumber: $pageNumber, hasMorePages: $hasMorePages, error: $error)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SearchStateCopyWith<$Res>  {
   factory $SearchStateCopyWith(SearchState value, $Res Function(SearchState) _then) = _$SearchStateCopyWithImpl;
 @useResult
 $Res call({
- SearchCategory selectedCategory, String searchQuery
+ SearchCategory selectedCategory, String searchQuery, List<dynamic> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
 });
 
 
@@ -62,11 +62,17 @@ class _$SearchStateCopyWithImpl<$Res>
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedCategory = null,Object? searchQuery = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedCategory = null,Object? searchQuery = null,Object? results = null,Object? isLoading = null,Object? isLoadingMore = null,Object? pageNumber = null,Object? hasMorePages = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as SearchCategory,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,
+as String,results: null == results ? _self.results : results // ignore: cast_nullable_to_non_nullable
+as List<dynamic>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
+as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable
+as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -151,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
-return $default(_that.selectedCategory,_that.searchQuery);case _:
+return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
   return orElse();
 
 }
@@ -172,10 +178,10 @@ return $default(_that.selectedCategory,_that.searchQuery);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _SearchState():
-return $default(_that.selectedCategory,_that.searchQuery);case _:
+return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +198,10 @@ return $default(_that.selectedCategory,_that.searchQuery);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SearchCategory selectedCategory,  String searchQuery)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
-return $default(_that.selectedCategory,_that.searchQuery);case _:
+return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
   return null;
 
 }
@@ -207,11 +213,23 @@ return $default(_that.selectedCategory,_that.searchQuery);case _:
 
 
 class _SearchState implements SearchState {
-  const _SearchState({this.selectedCategory = SearchCategory.repos, this.searchQuery = ''});
+  const _SearchState({this.selectedCategory = SearchCategory.repos, this.searchQuery = '', final  List<dynamic> results = const [], this.isLoading = false, this.isLoadingMore = false, this.pageNumber = 1, this.hasMorePages = true, this.error}): _results = results;
   
 
 @override@JsonKey() final  SearchCategory selectedCategory;
 @override@JsonKey() final  String searchQuery;
+ final  List<dynamic> _results;
+@override@JsonKey() List<dynamic> get results {
+  if (_results is EqualUnmodifiableListView) return _results;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_results);
+}
+
+@override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isLoadingMore;
+@override@JsonKey() final  int pageNumber;
+@override@JsonKey() final  bool hasMorePages;
+@override final  String? error;
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +241,16 @@ _$SearchStateCopyWith<_SearchState> get copyWith => __$SearchStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchState&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchState&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other._results, _results)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.pageNumber, pageNumber) || other.pageNumber == pageNumber)&&(identical(other.hasMorePages, hasMorePages) || other.hasMorePages == hasMorePages)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedCategory,searchQuery);
+int get hashCode => Object.hash(runtimeType,selectedCategory,searchQuery,const DeepCollectionEquality().hash(_results),isLoading,isLoadingMore,pageNumber,hasMorePages,error);
 
 @override
 String toString() {
-  return 'SearchState(selectedCategory: $selectedCategory, searchQuery: $searchQuery)';
+  return 'SearchState(selectedCategory: $selectedCategory, searchQuery: $searchQuery, results: $results, isLoading: $isLoading, isLoadingMore: $isLoadingMore, pageNumber: $pageNumber, hasMorePages: $hasMorePages, error: $error)';
 }
 
 
@@ -243,7 +261,7 @@ abstract mixin class _$SearchStateCopyWith<$Res> implements $SearchStateCopyWith
   factory _$SearchStateCopyWith(_SearchState value, $Res Function(_SearchState) _then) = __$SearchStateCopyWithImpl;
 @override @useResult
 $Res call({
- SearchCategory selectedCategory, String searchQuery
+ SearchCategory selectedCategory, String searchQuery, List<dynamic> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
 });
 
 
@@ -260,11 +278,17 @@ class __$SearchStateCopyWithImpl<$Res>
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedCategory = null,Object? searchQuery = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedCategory = null,Object? searchQuery = null,Object? results = null,Object? isLoading = null,Object? isLoadingMore = null,Object? pageNumber = null,Object? hasMorePages = null,Object? error = freezed,}) {
   return _then(_SearchState(
 selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as SearchCategory,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,
+as String,results: null == results ? _self._results : results // ignore: cast_nullable_to_non_nullable
+as List<dynamic>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
+as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable
+as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

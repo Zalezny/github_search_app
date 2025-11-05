@@ -8,7 +8,7 @@ import 'package:github_search_app/presentation/detail/widgets/hero_section.dart'
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card_row.dart';
 import 'package:github_search_app/presentation/detail/widgets/stats_grid.dart';
-import 'package:github_search_app/presentation/search/search_page.dart';
+import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class UserDetailContent extends StatelessWidget {

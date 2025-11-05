@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
-import 'package:github_search_app/presentation/search/search_page.dart';
 
 class GradientActionButton extends StatelessWidget {
   final VoidCallback onTap;

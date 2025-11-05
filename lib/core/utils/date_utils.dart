@@ -1,9 +1,7 @@
 import 'package:intl/intl.dart';
 
 class DateUtils {
-  DateUtils._();
 
-  /// Formatuje datę do czytelnej formy (np. "2 days ago", "Jan 15, 2024")
   static String formatDate(String dateString) {
     try {
       final date = DateTime.parse(dateString);

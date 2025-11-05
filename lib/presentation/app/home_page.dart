@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
 import 'package:github_search_app/presentation/app/cubit/home_state.dart';
+import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
 import 'package:github_search_app/settings/injection.dart';
 import 'package:github_search_app/presentation/detail/detail_page.dart';
 import 'package:github_search_app/presentation/results/results_list_page.dart';
@@ -12,7 +13,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => getIt<HomeCubit>(), child: const _HomePageContent());
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<HomeCubit>()),
+        BlocProvider(create: (context) => getIt<SearchCubit>()),
+      ],
+      child: const _HomePageContent(),
+    );
   }
 }
 
@@ -23,17 +30,7 @@ class _HomePageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
 
-    return BlocConsumer<HomeCubit, HomeState>(
-      listener: (context, state) {
-        // Show error snackbar when user detail loading fails
-        if (state.error != null &&
-            state.isLoading == false &&
-            state.currentPage != AppPage.results) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.error}'), backgroundColor: Colors.red),
-          );
-        }
-      },
+    return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return PopScope(
           canPop: cubit.canPop(),
@@ -63,25 +60,19 @@ class _HomePageContent extends StatelessWidget {
   }
 
   Widget _buildCurrentPage(BuildContext context, HomeState state) {
+    // Get category from SearchCubit for DetailPage
+    final searchState = context.read<SearchCubit>().state;
+
     switch (state.currentPage) {
       case AppPage.search:
         return const SearchPage(key: ValueKey('search'));
       case AppPage.results:
-        return ResultsListPage(
-          key: const ValueKey('results'),
-          results: state.results,
-          query: state.searchQuery,
-          category: state.selectedCategory,
-          isLoading: state.isLoading,
-          isLoadingMore: state.isLoadingMore,
-          hasMorePages: state.hasMorePages,
-          error: state.error,
-        );
+        return const ResultsListPage(key: ValueKey('results'));
       case AppPage.detail:
         return DetailPage(
           key: const ValueKey('detail'),
           item: state.selectedItem,
-          category: state.selectedCategory,
+          category: searchState.selectedCategory,
         );
     }
   }

@@ -29,7 +29,7 @@ Flutter application for searching GitHub repositories and users with detailed in
 
 ### Option 2: Build and Install APK on Android Device
 
-Just use realease.apk in repository
+Just use `app-release.apk` in repository
 
 ## 📁 Project Structure
 
@@ -58,11 +58,9 @@ lib/
 │   │   └── cubit/                 # Cubit page
 │   ├── results/                   # Results list page
 │   │   └── widgets/               # Results page components
-│   │   └── cubit/                 # Cubit page
 │   └── detail/                    # Detail page
 │       ├── cubit/                 # DetailCubit (detail state)
 │       └── widgets/               # Detail page components
-│       └── cubit/                 # Cubit page
 │
 ├── settings/                       # App configuration
 │   ├── injection.dart             # Dependency injection setup
@@ -140,63 +138,11 @@ State management using **flutter_bloc**:
 - **url_launcher** - Open external URLs
 - **Dartz** - Functional programming (Either for error handling)
 
-## 🧪 Tests
-
-The project includes comprehensive unit tests for the data layer.
-
-### Test Files
-
-#### `test/data/repositories/github_repo_repository_impl_test.dart`
-
-**Tests for Repository Search:**
-1. **Success case** - Verifies successful repository search returns mapped entities
-2. **404 Not Found** - Validates handling when no repositories are found
-3. **Generic error handling** - Tests error handling for unexpected failures
-
-**What is tested:**
-- API response to entity mapping
-- Error handling and proper Either<Failure, List<Entity>> returns
-- Repository implementation contract
-
-#### `test/data/repositories/github_user_repository_impl_test.dart`
-
-**Tests for User Search and Details:**
-1. **User search success** - Verifies user search returns mapped entities
-2. **User search 404 error** - Validates not found error handling
-3. **User search generic error** - Tests generic error scenarios
-
-**What is tested:**
-- User search functionality
-- User details fetching
-- Data transformation from DTOs to entities
-- Error propagation
-
-### Test Approach
-
-**Technologies:**
-- `flutter_test` - Testing framework
-- `mocktail` - Mocking dependencies
-- `dartz` - Either type for error handling
-
-**Patterns:**
-- **AAA Pattern** (Arrange, Act, Assert)
-- **Mock dependencies** - API data sources mocked
-- **Isolated tests** - Each test is independent
-
-**Coverage:**
-- Data layer repository implementations
-- Success paths
-- Error scenarios (404, generic errors)
-- Data mapping and transformation
-
 ### Running Tests
 
 ```bash
 # Run all tests
 flutter test
-
-# Run with coverage
-flutter test --coverage
 
 # Run specific test file
 flutter test test/data/repositories/github_repo_repository_impl_test.dart
@@ -209,3 +155,25 @@ The project uses code generation for:
 - **Injectable** - Dependency injection setup
 - **Retrofit** - API client generation
 - **JSON Serializable** - JSON serialization
+
+## Future Improvements
+
+While the current implementation is fully functional, here are potential enhancements that could be implemented:
+
+### 1. **Localization with EasyLocalization**
+
+**Current state:** All strings are hardcoded in the UI  
+**Improvement:** Implement `easy_localization` package for multi-language support
+
+**Benefits:**
+- Centralized string management in JSON files
+- Support for multiple languages (English, Polish, etc.)
+
+### 2. **AutoRoute for Type-Safe Navigation**
+
+**Current state:** Manual navigation management with `HomeCubit` and page switching  
+**Improvement:** Implement `auto_route` for declarative, type-safe routing
+
+**Benefits:**
+- Type-safe navigation with generated routes
+- Deep linking support out of the box

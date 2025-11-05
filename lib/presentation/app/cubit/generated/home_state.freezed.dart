@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- AppPage get currentPage; String get searchQuery; SearchCategory get selectedCategory; List<dynamic> get results; dynamic get selectedItem; bool get isLoading; bool get isLoadingMore; int get pageNumber; bool get hasMorePages; String? get error;
+ AppPage get currentPage; dynamic get selectedItem;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&const DeepCollectionEquality().equals(other.results, results)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.pageNumber, pageNumber) || other.pageNumber == pageNumber)&&(identical(other.hasMorePages, hasMorePages) || other.hasMorePages == hasMorePages)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentPage,searchQuery,selectedCategory,const DeepCollectionEquality().hash(results),const DeepCollectionEquality().hash(selectedItem),isLoading,isLoadingMore,pageNumber,hasMorePages,error);
+int get hashCode => Object.hash(runtimeType,currentPage,const DeepCollectionEquality().hash(selectedItem));
 
 @override
 String toString() {
-  return 'HomeState(currentPage: $currentPage, searchQuery: $searchQuery, selectedCategory: $selectedCategory, results: $results, selectedItem: $selectedItem, isLoading: $isLoading, isLoadingMore: $isLoadingMore, pageNumber: $pageNumber, hasMorePages: $hasMorePages, error: $error)';
+  return 'HomeState(currentPage: $currentPage, selectedItem: $selectedItem)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- AppPage currentPage, String searchQuery, SearchCategory selectedCategory, List<dynamic> results, dynamic selectedItem, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
+ AppPage currentPage, dynamic selectedItem
 });
 
 
@@ -62,19 +62,11 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? currentPage = null,Object? searchQuery = null,Object? selectedCategory = null,Object? results = null,Object? selectedItem = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? pageNumber = null,Object? hasMorePages = null,Object? error = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? currentPage = null,Object? selectedItem = freezed,}) {
   return _then(_self.copyWith(
 currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
-as AppPage,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
-as SearchCategory,results: null == results ? _self.results : results // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
-as dynamic,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
-as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable
-as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as String?,
+as AppPage,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
+as dynamic,
   ));
 }
 
@@ -159,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppPage currentPage,  String searchQuery,  SearchCategory selectedCategory,  List<dynamic> results,  dynamic selectedItem,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppPage currentPage,  dynamic selectedItem)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that.results,_that.selectedItem,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
+return $default(_that.currentPage,_that.selectedItem);case _:
   return orElse();
 
 }
@@ -180,10 +172,10 @@ return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppPage currentPage,  String searchQuery,  SearchCategory selectedCategory,  List<dynamic> results,  dynamic selectedItem,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppPage currentPage,  dynamic selectedItem)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that.results,_that.selectedItem,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
+return $default(_that.currentPage,_that.selectedItem);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +192,10 @@ return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppPage currentPage,  String searchQuery,  SearchCategory selectedCategory,  List<dynamic> results,  dynamic selectedItem,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppPage currentPage,  dynamic selectedItem)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that.results,_that.selectedItem,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
+return $default(_that.currentPage,_that.selectedItem);case _:
   return null;
 
 }
@@ -215,25 +207,11 @@ return $default(_that.currentPage,_that.searchQuery,_that.selectedCategory,_that
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.currentPage = AppPage.search, this.searchQuery = '', this.selectedCategory = SearchCategory.repos, final  List<dynamic> results = const [], this.selectedItem, this.isLoading = false, this.isLoadingMore = false, this.pageNumber = 1, this.hasMorePages = true, this.error}): _results = results;
+  const _HomeState({this.currentPage = AppPage.search, this.selectedItem});
   
 
 @override@JsonKey() final  AppPage currentPage;
-@override@JsonKey() final  String searchQuery;
-@override@JsonKey() final  SearchCategory selectedCategory;
- final  List<dynamic> _results;
-@override@JsonKey() List<dynamic> get results {
-  if (_results is EqualUnmodifiableListView) return _results;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_results);
-}
-
 @override final  dynamic selectedItem;
-@override@JsonKey() final  bool isLoading;
-@override@JsonKey() final  bool isLoadingMore;
-@override@JsonKey() final  int pageNumber;
-@override@JsonKey() final  bool hasMorePages;
-@override final  String? error;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +223,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&const DeepCollectionEquality().equals(other._results, _results)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.pageNumber, pageNumber) || other.pageNumber == pageNumber)&&(identical(other.hasMorePages, hasMorePages) || other.hasMorePages == hasMorePages)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentPage,searchQuery,selectedCategory,const DeepCollectionEquality().hash(_results),const DeepCollectionEquality().hash(selectedItem),isLoading,isLoadingMore,pageNumber,hasMorePages,error);
+int get hashCode => Object.hash(runtimeType,currentPage,const DeepCollectionEquality().hash(selectedItem));
 
 @override
 String toString() {
-  return 'HomeState(currentPage: $currentPage, searchQuery: $searchQuery, selectedCategory: $selectedCategory, results: $results, selectedItem: $selectedItem, isLoading: $isLoading, isLoadingMore: $isLoadingMore, pageNumber: $pageNumber, hasMorePages: $hasMorePages, error: $error)';
+  return 'HomeState(currentPage: $currentPage, selectedItem: $selectedItem)';
 }
 
 
@@ -265,7 +243,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppPage currentPage, String searchQuery, SearchCategory selectedCategory, List<dynamic> results, dynamic selectedItem, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
+ AppPage currentPage, dynamic selectedItem
 });
 
 
@@ -282,19 +260,11 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? currentPage = null,Object? searchQuery = null,Object? selectedCategory = null,Object? results = null,Object? selectedItem = freezed,Object? isLoading = null,Object? isLoadingMore = null,Object? pageNumber = null,Object? hasMorePages = null,Object? error = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? currentPage = null,Object? selectedItem = freezed,}) {
   return _then(_HomeState(
 currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
-as AppPage,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
-as SearchCategory,results: null == results ? _self._results : results // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
-as dynamic,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
-as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable
-as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as String?,
+as AppPage,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
+as dynamic,
   ));
 }
 

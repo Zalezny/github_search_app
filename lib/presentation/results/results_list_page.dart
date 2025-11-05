@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_search_app/core/utils/format_utils.dart';
 import 'package:github_search_app/domain/entities/github_repo.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
+import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
+import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 import 'package:github_search_app/settings/theme/app_colors.dart';
-import 'package:github_search_app/presentation/search/search_page.dart';
 import 'package:github_search_app/presentation/results/widgets/loading_view.dart';
 import 'package:github_search_app/presentation/results/widgets/error_view.dart';
 import 'package:github_search_app/presentation/results/widgets/empty_view.dart';
@@ -14,24 +16,7 @@ import 'package:github_search_app/presentation/results/widgets/user_card.dart';
 import 'package:github_search_app/presentation/results/widgets/results_header.dart';
 
 class ResultsListPage extends StatefulWidget {
-  final List<dynamic> results; // List<GithubRepo> or List<GithubUser>
-  final String query;
-  final SearchCategory category;
-  final bool isLoading;
-  final bool isLoadingMore;
-  final bool hasMorePages;
-  final String? error;
-
-  const ResultsListPage({
-    super.key,
-    required this.results,
-    required this.query,
-    required this.category,
-    required this.isLoading,
-    required this.isLoadingMore,
-    required this.hasMorePages,
-    required this.error,
-  });
+  const ResultsListPage({super.key});
 
   @override
   State<ResultsListPage> createState() => _ResultsListPageState();
@@ -52,7 +37,7 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.7) {
-      context.read<HomeCubit>().loadMoreResults();
+      context.read<SearchCubit>().loadMoreResults();
     }
   }
 
@@ -65,39 +50,43 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
-        child: SafeArea(
-          child: Column(
-            children: [
-              ResultsHeader(
-                animationController: _animationController,
-                query: widget.query,
-                category: widget.category,
-              ),
-              if (widget.isLoading)
-                const Expanded(child: LoadingView())
-              else if (widget.error != null)
-                Expanded(
-                  child: ErrorView(
-                    error: widget.error!,
-                    onRetry: () => context.read<HomeCubit>().retry(),
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Container(
+            decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  ResultsHeader(
+                    animationController: _animationController,
+                    query: state.searchQuery,
+                    category: state.selectedCategory,
                   ),
-                )
-              else if (widget.results.isEmpty)
-                const Expanded(child: EmptyView())
-              else
-                Expanded(child: _buildResultsList()),
-            ],
+                  if (state.isLoading)
+                    const Expanded(child: LoadingView())
+                  else if (state.error != null)
+                    Expanded(
+                      child: ErrorView(
+                        error: state.error!,
+                        onRetry: () => context.read<SearchCubit>().retry(),
+                      ),
+                    )
+                  else if (state.results.isEmpty)
+                    const Expanded(child: EmptyView())
+                  else
+                    Expanded(child: _buildResultsList(state)),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildResultsList() {
-    final itemCount = widget.results.length + (widget.isLoadingMore || widget.hasMorePages ? 1 : 0);
+  Widget _buildResultsList(SearchState state) {
+    final itemCount = state.results.length + (state.isLoadingMore || state.hasMorePages ? 1 : 0);
 
     return ListView.builder(
       controller: _scrollController,
@@ -105,17 +94,17 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
       itemCount: itemCount,
       itemBuilder: (context, index) {
         // Show loading indicator at the bottom
-        if (index == widget.results.length) {
-          if (widget.isLoadingMore) {
+        if (index == state.results.length) {
+          if (state.isLoadingMore) {
             return _buildLoadingMoreIndicator();
-          } else if (widget.hasMorePages) {
+          } else if (state.hasMorePages) {
             return const SizedBox(height: 80);
           } else {
             return const SizedBox.shrink();
           }
         }
 
-        final item = widget.results[index];
+        final item = state.results[index];
 
         // Disable animation for items loaded via pagination (index >= 20)
         final shouldAnimate = index < 20;
@@ -123,13 +112,13 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
         if (!shouldAnimate) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: widget.category == SearchCategory.repos
+            child: state.selectedCategory == SearchCategory.repos
                 ? RepoCard(
                     repo: item as GithubRepo,
                     onTap: () {
                       context.read<HomeCubit>().selectResult(item);
                     },
-                    formatNumber: _formatNumber,
+                    formatNumber: FormatUtils.formatNumber,
                   )
                 : UserCard(
                     user: item as GithubUser,
@@ -152,13 +141,13 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: widget.category == SearchCategory.repos
+            child: state.selectedCategory == SearchCategory.repos
                 ? RepoCard(
                     repo: item as GithubRepo,
                     onTap: () {
                       context.read<HomeCubit>().selectResult(item);
                     },
-                    formatNumber: _formatNumber,
+                    formatNumber: FormatUtils.formatNumber,
                   )
                 : UserCard(
                     user: item as GithubUser,
@@ -197,12 +186,5 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
         ],
       ),
     );
-  }
-
-  String _formatNumber(int number) {
-    if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(1)}k';
-    }
-    return number.toString();
   }
 }

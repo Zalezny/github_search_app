@@ -47,7 +47,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final appModule = _$AppModule();
-    gh.factory<_i1010.SearchCubit>(() => _i1010.SearchCubit());
+    gh.factory<_i501.HomeCubit>(() => _i501.HomeCubit());
     gh.lazySingleton<_i974.Logger>(() => appModule.logger());
     gh.lazySingleton<_i361.Dio>(() => appModule.dio(gh<_i974.Logger>()));
     gh.lazySingleton<_i792.GithubRepoApiService>(
@@ -74,8 +74,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i834.DetailCubit>(
       () => _i834.DetailCubit(gh<_i560.GetUserDetailsUseCase>()),
     );
-    gh.factory<_i501.HomeCubit>(
-      () => _i501.HomeCubit(
+    gh.factory<_i1010.SearchCubit>(
+      () => _i1010.SearchCubit(
         gh<_i643.SearchRepositoriesUseCase>(),
         gh<_i564.SearchUsersUseCase>(),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
-import 'package:github_search_app/presentation/search/search_page.dart';
+import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class ResultsHeader extends StatelessWidget {
