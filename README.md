@@ -2,7 +2,7 @@
 
 Flutter application for searching GitHub repositories and users with detailed information display.
 
-## 🚀 Running the Application
+## Running the Application
 
 ### Option 1: Run in Development Mode
 
@@ -31,7 +31,11 @@ Flutter application for searching GitHub repositories and users with detailed in
 
 Just use `app-release.apk` in repository
 
-## 📁 Project Structure
+## App Tests
+
+Application tested `Android` and `DevicePreview` plugin
+
+## Project Structure
 
 The project follows **Clean Architecture** principles with a **layer-first** approach:
 
@@ -128,7 +132,7 @@ State management using **flutter_bloc**:
 - Easy to understand data flow
 - Prevents cross-layer dependencies
 
-## 📦 Key Technologies
+## Key Technologies
 
 - **Flutter** - UI framework
 - **flutter_bloc** - State management (Cubit)
@@ -148,7 +152,7 @@ flutter test
 flutter test test/data/repositories/github_repo_repository_impl_test.dart
 ```
 
-## 🔧 Code Generation
+## Code Generation
 
 The project uses code generation for:
 - **Freezed** - Immutable models, unions, copyWith
