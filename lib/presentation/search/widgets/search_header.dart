@@ -5,11 +5,7 @@ class SearchHeader extends StatelessWidget {
   final Animation<Offset> slideAnimation;
   final Animation<double> fadeAnimation;
 
-  const SearchHeader({
-    super.key,
-    required this.slideAnimation,
-    required this.fadeAnimation,
-  });
+  const SearchHeader({super.key, required this.slideAnimation, required this.fadeAnimation});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +26,9 @@ class SearchHeader extends StatelessWidget {
                 ),
                 child: Text(
                   'DISCOVER & EXPLORE',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.copyWith(color: AppTheme.primary, fontSize: 11),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: AppTheme.primary, fontSize: 11),
                 ),
               ),
               const SizedBox(height: 12),

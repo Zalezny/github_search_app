@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:github_search_app/presentation/search/widgets/search_text_field.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class AnimatedSearchField extends StatefulWidget {
@@ -83,51 +84,21 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField>
                   child: child,
                 );
               },
-              child: _buildTextField(),
+              child: SearchTextField(
+                controller: widget.controller,
+                focusNode: widget.focusNode,
+                isLoading: widget.isLoading,
+                isFocused: widget.isFocused,
+                onSubmit: widget.onSubmit,
+              ),
             )
-          : _buildTextField(),
-    );
-  }
-
-  Widget _buildTextField() {
-    return TextField(
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      enabled: !widget.isLoading,
-      style: const TextStyle(color: AppTheme.foreground, fontSize: 16),
-      decoration: InputDecoration(
-        hintText: widget.isLoading ? 'Searching...' : 'Search repositories or developers...',
-        hintStyle: TextStyle(color: AppTheme.mutedForeground, fontSize: 16),
-        prefixIcon: AnimatedSwitcher(
-          duration: AppTheme.fastAnimation,
-          child: widget.isLoading
-              ? const Padding(
-                  key: ValueKey('loading'),
-                  padding: EdgeInsets.all(14.0),
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
-                    ),
-                  ),
-                )
-              : Icon(
-                  key: const ValueKey('search'),
-                  Icons.search,
-                  color: widget.isFocused ? AppTheme.primary : AppTheme.mutedForeground,
-                ),
-        ),
-        filled: true,
-        fillColor: AppTheme.card,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      ),
-      onSubmitted: (_) => widget.onSubmit(),
+          : SearchTextField(
+              controller: widget.controller,
+              focusNode: widget.focusNode,
+              isLoading: widget.isLoading,
+              isFocused: widget.isFocused,
+              onSubmit: widget.onSubmit,
+            ),
     );
   }
 }

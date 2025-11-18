@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_search_app/core/utils/format_utils.dart';
-import 'package:github_search_app/domain/entities/github_repo.dart';
-import 'package:github_search_app/domain/entities/github_user.dart';
-import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
@@ -11,9 +7,8 @@ import 'package:github_search_app/settings/theme/app_colors.dart';
 import 'package:github_search_app/presentation/results/widgets/loading_view.dart';
 import 'package:github_search_app/presentation/results/widgets/error_view.dart';
 import 'package:github_search_app/presentation/results/widgets/empty_view.dart';
-import 'package:github_search_app/presentation/results/widgets/repo_card.dart';
-import 'package:github_search_app/presentation/results/widgets/user_card.dart';
 import 'package:github_search_app/presentation/results/widgets/results_header.dart';
+import 'package:github_search_app/presentation/results/widgets/results_list_view.dart';
 
 class ResultsListPage extends StatefulWidget {
   const ResultsListPage({super.key});
@@ -75,116 +70,15 @@ class _ResultsListPageState extends State<ResultsListPage> with SingleTickerProv
                   else if (state.results.isEmpty)
                     const Expanded(child: EmptyView())
                   else
-                    Expanded(child: _buildResultsList(state)),
+                    Expanded(
+                      child: ResultsListView(state: state, scrollController: _scrollController),
+                    ),
                 ],
               ),
             ),
           ),
         );
       },
-    );
-  }
-
-  Widget _buildResultsList(SearchState state) {
-    final itemCount = state.results.length + (state.isLoadingMore || state.hasMorePages ? 1 : 0);
-
-    return ListView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        // Show loading indicator at the bottom
-        if (index == state.results.length) {
-          if (state.isLoadingMore) {
-            return _buildLoadingMoreIndicator();
-          } else if (state.hasMorePages) {
-            return const SizedBox(height: 80);
-          } else {
-            return const SizedBox.shrink();
-          }
-        }
-
-        final item = state.results[index];
-
-        // Disable animation for items loaded via pagination (index >= 20)
-        final shouldAnimate = index < 20;
-
-        if (!shouldAnimate) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: state.selectedCategory == SearchCategory.repos
-                ? RepoCard(
-                    repo: item as GithubRepo,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                    formatNumber: FormatUtils.formatNumber,
-                  )
-                : UserCard(
-                    user: item as GithubUser,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                  ),
-          );
-        }
-
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: 1),
-          duration: Duration(milliseconds: 300 + (index * 50)),
-          curve: Curves.easeOut,
-          builder: (context, value, child) {
-            return Transform.translate(
-              offset: Offset(0, 30 * (1 - value)),
-              child: Opacity(opacity: value, child: child),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: state.selectedCategory == SearchCategory.repos
-                ? RepoCard(
-                    repo: item as GithubRepo,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                    formatNumber: FormatUtils.formatNumber,
-                  )
-                : UserCard(
-                    user: item as GithubUser,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                  ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildLoadingMoreIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 32,
-            height: 32,
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Loading new elements...',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mutedForeground),
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
     );
   }
 }
