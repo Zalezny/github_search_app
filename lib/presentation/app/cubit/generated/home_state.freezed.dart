@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- AppPage get currentPage; dynamic get selectedItem;
+ AppPage get currentPage; SearchResultItem? get selectedItem;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,12 +25,12 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentPage,const DeepCollectionEquality().hash(selectedItem));
+int get hashCode => Object.hash(runtimeType,currentPage,selectedItem);
 
 @override
 String toString() {
@@ -45,11 +45,11 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- AppPage currentPage, dynamic selectedItem
+ AppPage currentPage, SearchResultItem? selectedItem
 });
 
 
-
+$SearchResultItemCopyWith<$Res>? get selectedItem;
 
 }
 /// @nodoc
@@ -66,10 +66,22 @@ class _$HomeStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as AppPage,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as SearchResultItem?,
   ));
 }
+/// Create a copy of HomeState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SearchResultItemCopyWith<$Res>? get selectedItem {
+    if (_self.selectedItem == null) {
+    return null;
+  }
 
+  return $SearchResultItemCopyWith<$Res>(_self.selectedItem!, (value) {
+    return _then(_self.copyWith(selectedItem: value));
+  });
+}
 }
 
 
@@ -151,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppPage currentPage,  dynamic selectedItem)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AppPage currentPage,  SearchResultItem? selectedItem)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
 return $default(_that.currentPage,_that.selectedItem);case _:
@@ -172,7 +184,7 @@ return $default(_that.currentPage,_that.selectedItem);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppPage currentPage,  dynamic selectedItem)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AppPage currentPage,  SearchResultItem? selectedItem)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
 return $default(_that.currentPage,_that.selectedItem);case _:
@@ -192,7 +204,7 @@ return $default(_that.currentPage,_that.selectedItem);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppPage currentPage,  dynamic selectedItem)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AppPage currentPage,  SearchResultItem? selectedItem)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
 return $default(_that.currentPage,_that.selectedItem);case _:
@@ -211,7 +223,7 @@ class _HomeState implements HomeState {
   
 
 @override@JsonKey() final  AppPage currentPage;
-@override final  dynamic selectedItem;
+@override final  SearchResultItem? selectedItem;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,12 +235,12 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&const DeepCollectionEquality().equals(other.selectedItem, selectedItem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,currentPage,const DeepCollectionEquality().hash(selectedItem));
+int get hashCode => Object.hash(runtimeType,currentPage,selectedItem);
 
 @override
 String toString() {
@@ -243,11 +255,11 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- AppPage currentPage, dynamic selectedItem
+ AppPage currentPage, SearchResultItem? selectedItem
 });
 
 
-
+@override $SearchResultItemCopyWith<$Res>? get selectedItem;
 
 }
 /// @nodoc
@@ -264,11 +276,23 @@ class __$HomeStateCopyWithImpl<$Res>
   return _then(_HomeState(
 currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as AppPage,selectedItem: freezed == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
-as dynamic,
+as SearchResultItem?,
   ));
 }
 
+/// Create a copy of HomeState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SearchResultItemCopyWith<$Res>? get selectedItem {
+    if (_self.selectedItem == null) {
+    return null;
+  }
 
+  return $SearchResultItemCopyWith<$Res>(_self.selectedItem!, (value) {
+    return _then(_self.copyWith(selectedItem: value));
+  });
+}
 }
 
 // dart format on

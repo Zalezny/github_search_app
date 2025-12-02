@@ -8,7 +8,6 @@ import 'package:github_search_app/presentation/detail/widgets/hero_section.dart'
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card_row.dart';
 import 'package:github_search_app/presentation/detail/widgets/stats_grid.dart';
-import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class UserDetailContent extends StatelessWidget {
@@ -17,7 +16,6 @@ class UserDetailContent extends StatelessWidget {
   final Animation<Offset> slideAnimation;
   final Animation<double> avatarScale;
   final List<Color> gradientColors;
-  final SearchCategory category;
 
   const UserDetailContent({
     super.key,
@@ -26,7 +24,6 @@ class UserDetailContent extends StatelessWidget {
     required this.slideAnimation,
     required this.avatarScale,
     required this.gradientColors,
-    required this.category,
   });
 
   @override
@@ -129,7 +126,7 @@ class UserDetailContent extends StatelessWidget {
                     );
                   }
                 },
-                category: category,
+                isRepoType: false,
                 text: 'View on GitHub',
                 icon: Icons.open_in_new,
               ),

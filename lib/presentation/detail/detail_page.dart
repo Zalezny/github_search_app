@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_search_app/domain/entities/github_repo.dart';
-import 'package:github_search_app/domain/entities/github_user_detail.dart';
+import 'package:github_search_app/domain/entities/search_result.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
 import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart';
 import 'package:github_search_app/presentation/detail/cubit/detail_state.dart';
-import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/injection.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 import 'package:github_search_app/settings/theme/app_colors.dart';
@@ -14,10 +12,9 @@ import 'package:github_search_app/presentation/detail/widgets/repo_detail_conten
 import 'package:github_search_app/presentation/detail/widgets/user_detail_content.dart';
 
 class DetailPage extends StatefulWidget {
-  final dynamic item; // GithubRepo or GithubUserDetail
-  final SearchCategory category;
+  final SearchResultItem item;
 
-  const DetailPage({super.key, required this.item, required this.category});
+  const DetailPage({super.key, required this.item});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -99,23 +96,24 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                         );
                       }
 
-                      return widget.category == SearchCategory.repos
-                          ? RepoDetailContent(
-                              repo: state.item as GithubRepo,
+                      return state.item?.map(
+                            repo: (repoItem) => RepoDetailContent(
+                              repo: repoItem.repo,
                               fadeAnimation: _fadeAnimation,
                               slideAnimation: _slideAnimation,
                               avatarScale: _avatarScale,
                               gradientColors: _heroColors(),
-                              category: widget.category,
-                            )
-                          : UserDetailContent(
-                              user: state.item as GithubUserDetail,
+                            ),
+                            user: (userItem) => const Center(child: CircularProgressIndicator()),
+                            userDetail: (userDetailItem) => UserDetailContent(
+                              user: userDetailItem.userDetail,
                               fadeAnimation: _fadeAnimation,
                               slideAnimation: _slideAnimation,
                               avatarScale: _avatarScale,
                               gradientColors: _heroColors(),
-                              category: widget.category,
-                            );
+                            ),
+                          ) ??
+                          const SizedBox.shrink();
                     },
                   ),
                 ),
@@ -128,14 +126,19 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   }
 
   List<Color> _heroColors() {
-    return widget.category == SearchCategory.repos
-        ? [
-            AppTheme.blueGradientStart.withValues(alpha: 0.18),
-            AppTheme.blueGradientEnd.withValues(alpha: 0.12),
-          ]
-        : [
-            AppTheme.purpleGradientStart.withValues(alpha: 0.18),
-            AppTheme.purpleGradientEnd.withValues(alpha: 0.12),
-          ];
+    return widget.item.map(
+      repo: (_) => [
+        AppTheme.blueGradientStart.withValues(alpha: 0.18),
+        AppTheme.blueGradientEnd.withValues(alpha: 0.12),
+      ],
+      user: (_) => [
+        AppTheme.purpleGradientStart.withValues(alpha: 0.18),
+        AppTheme.purpleGradientEnd.withValues(alpha: 0.12),
+      ],
+      userDetail: (_) => [
+        AppTheme.purpleGradientStart.withValues(alpha: 0.18),
+        AppTheme.purpleGradientEnd.withValues(alpha: 0.12),
+      ],
+    );
   }
 }

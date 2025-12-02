@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DetailState {
 
- dynamic get item; bool get isLoading; String? get error;
+ SearchResultItem? get item; bool get isLoading; String? get error;
 /// Create a copy of DetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,12 +25,12 @@ $DetailStateCopyWith<DetailState> get copyWith => _$DetailStateCopyWithImpl<Deta
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetailState&&const DeepCollectionEquality().equals(other.item, item)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DetailState&&(identical(other.item, item) || other.item == item)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(item),isLoading,error);
+int get hashCode => Object.hash(runtimeType,item,isLoading,error);
 
 @override
 String toString() {
@@ -45,11 +45,11 @@ abstract mixin class $DetailStateCopyWith<$Res>  {
   factory $DetailStateCopyWith(DetailState value, $Res Function(DetailState) _then) = _$DetailStateCopyWithImpl;
 @useResult
 $Res call({
- dynamic item, bool isLoading, String? error
+ SearchResultItem? item, bool isLoading, String? error
 });
 
 
-
+$SearchResultItemCopyWith<$Res>? get item;
 
 }
 /// @nodoc
@@ -65,12 +65,24 @@ class _$DetailStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? item = freezed,Object? isLoading = null,Object? error = freezed,}) {
   return _then(_self.copyWith(
 item: freezed == item ? _self.item : item // ignore: cast_nullable_to_non_nullable
-as dynamic,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as SearchResultItem?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
+/// Create a copy of DetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SearchResultItemCopyWith<$Res>? get item {
+    if (_self.item == null) {
+    return null;
+  }
 
+  return $SearchResultItemCopyWith<$Res>(_self.item!, (value) {
+    return _then(_self.copyWith(item: value));
+  });
+}
 }
 
 
@@ -152,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( dynamic item,  bool isLoading,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SearchResultItem? item,  bool isLoading,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DetailState() when $default != null:
 return $default(_that.item,_that.isLoading,_that.error);case _:
@@ -173,7 +185,7 @@ return $default(_that.item,_that.isLoading,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( dynamic item,  bool isLoading,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SearchResultItem? item,  bool isLoading,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _DetailState():
 return $default(_that.item,_that.isLoading,_that.error);case _:
@@ -193,7 +205,7 @@ return $default(_that.item,_that.isLoading,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( dynamic item,  bool isLoading,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SearchResultItem? item,  bool isLoading,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _DetailState() when $default != null:
 return $default(_that.item,_that.isLoading,_that.error);case _:
@@ -211,7 +223,7 @@ class _DetailState implements DetailState {
   const _DetailState({this.item, this.isLoading = false, this.error});
   
 
-@override final  dynamic item;
+@override final  SearchResultItem? item;
 @override@JsonKey() final  bool isLoading;
 @override final  String? error;
 
@@ -225,12 +237,12 @@ _$DetailStateCopyWith<_DetailState> get copyWith => __$DetailStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailState&&const DeepCollectionEquality().equals(other.item, item)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailState&&(identical(other.item, item) || other.item == item)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(item),isLoading,error);
+int get hashCode => Object.hash(runtimeType,item,isLoading,error);
 
 @override
 String toString() {
@@ -245,11 +257,11 @@ abstract mixin class _$DetailStateCopyWith<$Res> implements $DetailStateCopyWith
   factory _$DetailStateCopyWith(_DetailState value, $Res Function(_DetailState) _then) = __$DetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- dynamic item, bool isLoading, String? error
+ SearchResultItem? item, bool isLoading, String? error
 });
 
 
-
+@override $SearchResultItemCopyWith<$Res>? get item;
 
 }
 /// @nodoc
@@ -265,13 +277,25 @@ class __$DetailStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? item = freezed,Object? isLoading = null,Object? error = freezed,}) {
   return _then(_DetailState(
 item: freezed == item ? _self.item : item // ignore: cast_nullable_to_non_nullable
-as dynamic,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as SearchResultItem?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
+/// Create a copy of DetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SearchResultItemCopyWith<$Res>? get item {
+    if (_self.item == null) {
+    return null;
+  }
 
+  return $SearchResultItemCopyWith<$Res>(_self.item!, (value) {
+    return _then(_self.copyWith(item: value));
+  });
+}
 }
 
 // dart format on

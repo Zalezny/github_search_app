@@ -60,20 +60,13 @@ class _HomePageContent extends StatelessWidget {
   }
 
   Widget _buildCurrentPage(BuildContext context, HomeState state) {
-    // Get category from SearchCubit for DetailPage
-    final searchState = context.read<SearchCubit>().state;
-
     switch (state.currentPage) {
       case AppPage.search:
         return const SearchPage(key: ValueKey('search'));
       case AppPage.results:
         return const ResultsListPage(key: ValueKey('results'));
       case AppPage.detail:
-        return DetailPage(
-          key: const ValueKey('detail'),
-          item: state.selectedItem,
-          category: searchState.selectedCategory,
-        );
+        return DetailPage(key: const ValueKey('detail'), item: state.selectedItem!);
     }
   }
 }

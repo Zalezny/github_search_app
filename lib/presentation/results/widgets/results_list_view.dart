@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/core/utils/format_utils.dart';
-import 'package:github_search_app/domain/entities/github_repo.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
+import 'package:github_search_app/domain/entities/search_result.dart';
 import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
 import 'package:github_search_app/presentation/results/widgets/repo_card.dart';
 import 'package:github_search_app/presentation/results/widgets/user_card.dart';
@@ -43,20 +43,33 @@ class ResultsListView extends StatelessWidget {
         if (!shouldAnimate) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: state.selectedCategory == SearchCategory.repos
-                ? RepoCard(
-                    repo: item as GithubRepo,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                    formatNumber: FormatUtils.formatNumber,
-                  )
-                : UserCard(
-                    user: item as GithubUser,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                  ),
+            child: item.map(
+              repo: (repoItem) => RepoCard(
+                repo: repoItem.repo,
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+                formatNumber: FormatUtils.formatNumber,
+              ),
+              user: (userItem) => UserCard(
+                user: userItem.user,
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+              ),
+              userDetail: (userDetailItem) => UserCard(
+                user: GithubUser(
+                  id: userDetailItem.userDetail.id,
+                  login: userDetailItem.userDetail.login,
+                  avatarUrl: userDetailItem.userDetail.avatarUrl,
+                  htmlUrl: userDetailItem.userDetail.htmlUrl,
+                  type: 'User',
+                ),
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+              ),
+            ),
           );
         }
 
@@ -72,20 +85,33 @@ class ResultsListView extends StatelessWidget {
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: state.selectedCategory == SearchCategory.repos
-                ? RepoCard(
-                    repo: item as GithubRepo,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                    formatNumber: FormatUtils.formatNumber,
-                  )
-                : UserCard(
-                    user: item as GithubUser,
-                    onTap: () {
-                      context.read<HomeCubit>().selectResult(item);
-                    },
-                  ),
+            child: item.map(
+              repo: (repoItem) => RepoCard(
+                repo: repoItem.repo,
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+                formatNumber: FormatUtils.formatNumber,
+              ),
+              user: (userItem) => UserCard(
+                user: userItem.user,
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+              ),
+              userDetail: (userDetailItem) => UserCard(
+                user: GithubUser(
+                  id: userDetailItem.userDetail.id,
+                  login: userDetailItem.userDetail.login,
+                  avatarUrl: userDetailItem.userDetail.avatarUrl,
+                  htmlUrl: userDetailItem.userDetail.htmlUrl,
+                  type: 'User',
+                ),
+                onTap: () {
+                  context.read<HomeCubit>().selectResult(item);
+                },
+              ),
+            ),
           ),
         );
       },

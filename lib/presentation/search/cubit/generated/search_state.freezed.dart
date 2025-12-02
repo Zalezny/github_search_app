@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchState {
 
- SearchCategory get selectedCategory; String get searchQuery; List<dynamic> get results; bool get isLoading; bool get isLoadingMore; int get pageNumber; bool get hasMorePages; String? get error;
+ SearchCategory get selectedCategory; String get searchQuery; List<SearchResultItem> get results; bool get isLoading; bool get isLoadingMore; int get pageNumber; bool get hasMorePages; String? get error;
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $SearchStateCopyWith<$Res>  {
   factory $SearchStateCopyWith(SearchState value, $Res Function(SearchState) _then) = _$SearchStateCopyWithImpl;
 @useResult
 $Res call({
- SearchCategory selectedCategory, String searchQuery, List<dynamic> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
+ SearchCategory selectedCategory, String searchQuery, List<SearchResultItem> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
 });
 
 
@@ -67,7 +67,7 @@ class _$SearchStateCopyWithImpl<$Res>
 selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as SearchCategory,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,results: null == results ? _self.results : results // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as List<SearchResultItem>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
 as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable
@@ -157,7 +157,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<SearchResultItem> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
 return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
@@ -178,7 +178,7 @@ return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isL
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SearchCategory selectedCategory,  String searchQuery,  List<SearchResultItem> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _SearchState():
 return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
@@ -198,7 +198,7 @@ return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isL
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SearchCategory selectedCategory,  String searchQuery,  List<dynamic> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SearchCategory selectedCategory,  String searchQuery,  List<SearchResultItem> results,  bool isLoading,  bool isLoadingMore,  int pageNumber,  bool hasMorePages,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
 return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isLoading,_that.isLoadingMore,_that.pageNumber,_that.hasMorePages,_that.error);case _:
@@ -213,13 +213,13 @@ return $default(_that.selectedCategory,_that.searchQuery,_that.results,_that.isL
 
 
 class _SearchState implements SearchState {
-  const _SearchState({this.selectedCategory = SearchCategory.repos, this.searchQuery = '', final  List<dynamic> results = const [], this.isLoading = false, this.isLoadingMore = false, this.pageNumber = 1, this.hasMorePages = true, this.error}): _results = results;
+  const _SearchState({this.selectedCategory = SearchCategory.repos, this.searchQuery = '', final  List<SearchResultItem> results = const [], this.isLoading = false, this.isLoadingMore = false, this.pageNumber = 1, this.hasMorePages = true, this.error}): _results = results;
   
 
 @override@JsonKey() final  SearchCategory selectedCategory;
 @override@JsonKey() final  String searchQuery;
- final  List<dynamic> _results;
-@override@JsonKey() List<dynamic> get results {
+ final  List<SearchResultItem> _results;
+@override@JsonKey() List<SearchResultItem> get results {
   if (_results is EqualUnmodifiableListView) return _results;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_results);
@@ -261,7 +261,7 @@ abstract mixin class _$SearchStateCopyWith<$Res> implements $SearchStateCopyWith
   factory _$SearchStateCopyWith(_SearchState value, $Res Function(_SearchState) _then) = __$SearchStateCopyWithImpl;
 @override @useResult
 $Res call({
- SearchCategory selectedCategory, String searchQuery, List<dynamic> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
+ SearchCategory selectedCategory, String searchQuery, List<SearchResultItem> results, bool isLoading, bool isLoadingMore, int pageNumber, bool hasMorePages, String? error
 });
 
 
@@ -283,7 +283,7 @@ class __$SearchStateCopyWithImpl<$Res>
 selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as SearchCategory,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
 as String,results: null == results ? _self._results : results // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as List<SearchResultItem>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,pageNumber: null == pageNumber ? _self.pageNumber : pageNumber // ignore: cast_nullable_to_non_nullable
 as int,hasMorePages: null == hasMorePages ? _self.hasMorePages : hasMorePages // ignore: cast_nullable_to_non_nullable

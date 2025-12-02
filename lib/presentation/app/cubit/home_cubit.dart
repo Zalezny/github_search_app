@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_search_app/domain/entities/search_result.dart';
 import 'package:github_search_app/presentation/app/cubit/home_state.dart';
 import 'package:injectable/injectable.dart';
 
@@ -6,7 +7,7 @@ import 'package:injectable/injectable.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState());
 
-  void selectResult(dynamic item) {
+  void selectResult(SearchResultItem item) {
     emit(state.copyWith(selectedItem: item, currentPage: AppPage.detail));
   }
 

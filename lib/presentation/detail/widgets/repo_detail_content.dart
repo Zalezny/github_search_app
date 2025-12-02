@@ -8,7 +8,6 @@ import 'package:github_search_app/presentation/detail/widgets/gradient_action_bu
 import 'package:github_search_app/presentation/detail/widgets/hero_section.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
 import 'package:github_search_app/presentation/detail/widgets/stats_grid.dart';
-import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class RepoDetailContent extends StatelessWidget {
@@ -17,7 +16,6 @@ class RepoDetailContent extends StatelessWidget {
   final Animation<Offset> slideAnimation;
   final Animation<double> avatarScale;
   final List<Color> gradientColors;
-  final SearchCategory category;
 
   const RepoDetailContent({
     super.key,
@@ -26,7 +24,6 @@ class RepoDetailContent extends StatelessWidget {
     required this.slideAnimation,
     required this.avatarScale,
     required this.gradientColors,
-    required this.category,
   });
 
   @override
@@ -175,7 +172,7 @@ class RepoDetailContent extends StatelessWidget {
                     );
                   }
                 },
-                category: category,
+                isRepoType: true,
                 text: 'View on GitHub',
                 icon: Icons.open_in_new,
               ),

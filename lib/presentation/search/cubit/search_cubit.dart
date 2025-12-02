@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_search_app/domain/entities/search_result.dart';
 import 'package:github_search_app/domain/usecases/search_repositories_usecase.dart';
 import 'package:github_search_app/domain/usecases/search_users_usecase.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
@@ -41,7 +42,10 @@ class SearchCubit extends Cubit<SearchState> {
           emit(state.copyWith(error: error, isLoading: false, hasMorePages: false));
         },
         (repos) {
-          emit(state.copyWith(results: repos, isLoading: false, hasMorePages: repos.length == 20));
+          final results = repos.map((repo) => SearchResultItem.repo(repo)).toList();
+          emit(
+            state.copyWith(results: results, isLoading: false, hasMorePages: repos.length == 20),
+          );
         },
       );
     } else {
@@ -52,7 +56,10 @@ class SearchCubit extends Cubit<SearchState> {
           emit(state.copyWith(error: error, isLoading: false, hasMorePages: false));
         },
         (users) {
-          emit(state.copyWith(results: users, isLoading: false, hasMorePages: users.length == 20));
+          final results = users.map((user) => SearchResultItem.user(user)).toList();
+          emit(
+            state.copyWith(results: results, isLoading: false, hasMorePages: users.length == 20),
+          );
         },
       );
     }
@@ -77,7 +84,8 @@ class SearchCubit extends Cubit<SearchState> {
           emit(state.copyWith(isLoadingMore: false, error: error));
         },
         (repos) {
-          final updatedResults = List<dynamic>.from(state.results)..addAll(repos);
+          final newResults = repos.map((repo) => SearchResultItem.repo(repo)).toList();
+          final updatedResults = [...state.results, ...newResults];
           emit(
             state.copyWith(
               results: updatedResults,
@@ -100,7 +108,8 @@ class SearchCubit extends Cubit<SearchState> {
           emit(state.copyWith(isLoadingMore: false, error: error));
         },
         (users) {
-          final updatedResults = List<dynamic>.from(state.results)..addAll(users);
+          final newResults = users.map((user) => SearchResultItem.user(user)).toList();
+          final updatedResults = [...state.results, ...newResults];
           emit(
             state.copyWith(
               results: updatedResults,

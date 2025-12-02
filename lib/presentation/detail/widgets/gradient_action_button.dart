@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
 
 class GradientActionButton extends StatelessWidget {
   final VoidCallback onTap;
-  final SearchCategory category;
+  final bool isRepoType;
   final String text;
   final IconData icon;
 
   const GradientActionButton({
     super.key,
     required this.onTap,
-    required this.category,
+    required this.isRepoType,
     required this.text,
     required this.icon,
   });
@@ -25,7 +24,7 @@ class GradientActionButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: category == SearchCategory.repos
+            colors: isRepoType
                 ? [AppTheme.blueGradientStart, AppTheme.blueGradientEnd]
                 : [AppTheme.purpleGradientStart, AppTheme.purpleGradientEnd],
           ),

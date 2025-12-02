@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_search_app/domain/entities/github_user.dart';
+import 'package:github_search_app/domain/entities/search_result.dart';
 import 'package:github_search_app/domain/usecases/get_user_details_usecase.dart';
 import 'package:github_search_app/presentation/detail/cubit/detail_state.dart';
 import 'package:injectable/injectable.dart';
@@ -11,7 +11,7 @@ class DetailCubit extends Cubit<DetailState> {
 
   DetailCubit(this._getUserDetailsUseCase) : super(const DetailState());
 
-  void setItem(dynamic item) {
+  void setItem(SearchResultItem item) {
     emit(state.copyWith(item: item));
   }
 
@@ -25,17 +25,23 @@ class DetailCubit extends Cubit<DetailState> {
         emit(state.copyWith(error: error, isLoading: false));
       },
       (userDetail) {
-        emit(state.copyWith(item: userDetail, isLoading: false));
+        emit(state.copyWith(item: SearchResultItem.userDetail(userDetail), isLoading: false));
       },
     );
   }
 
-  Future<void> loadItemDetails(dynamic item) async {
-    if (item is GithubUser) {
-      await loadUserDetails(item.login);
-    } else {
-      setItem(item);
-    }
+  Future<void> loadItemDetails(SearchResultItem item) async {
+    await item.map(
+      repo: (repoItem) async {
+        setItem(item);
+      },
+      user: (userItem) async {
+        await loadUserDetails(userItem.user.login);
+      },
+      userDetail: (userDetailItem) async {
+        setItem(item);
+      },
+    );
   }
 
   void reset() {
