@@ -3,7 +3,7 @@ import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 import 'package:github_search_app/core/utils/format_utils.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
 import 'package:github_search_app/domain/entities/search_result.dart';
-import 'package:github_search_app/presentation/app/app_router.dart';
+import 'package:github_search_app/presentation/app/app_routes.dart';
 import 'package:github_search_app/presentation/results/widgets/repo_card.dart';
 import 'package:github_search_app/presentation/results/widgets/user_card.dart';
 import 'package:github_search_app/presentation/results/widgets/loading_more_indicator.dart';
@@ -114,6 +114,6 @@ class ResultsListView extends StatelessWidget {
   }
 
   void _openDetail(BuildContext context, SearchResultItem item) {
-    context.pushNamed(AppRoutes.detail, extra: item);
+    context.push(AppRoutes.detail, extra: item);
   }
 }

@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:github_search_app/domain/entities/search_result.dart';
+import 'package:github_search_app/presentation/app/app_routes.dart';
 import 'package:github_search_app/presentation/detail/detail_page.dart';
 import 'package:github_search_app/presentation/results/results_list_page.dart';
 import 'package:github_search_app/presentation/search/search_page.dart';
 import 'package:go_router/go_router.dart';
 
-abstract final class AppRoutes {
-  static const search = 'search';
-  static const results = 'results';
-  static const detail = 'detail';
-}
-
 final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(
-      path: '/',
-      name: AppRoutes.search,
+      path: AppRoutes.search,
       pageBuilder: (context, state) =>
           _animatedPage(state: state, child: const SearchPage()),
     ),
     GoRoute(
-      path: '/results',
-      name: AppRoutes.results,
+      path: AppRoutes.results,
       pageBuilder: (context, state) =>
           _animatedPage(state: state, child: const ResultsListPage()),
-      routes: [
-        GoRoute(
-          path: 'detail',
-          name: AppRoutes.detail,
-          redirect: (context, state) =>
-              state.extra is SearchResultItem ? null : '/results',
-          pageBuilder: (context, state) => _animatedPage(
-            state: state,
-            child: DetailPage(item: state.extra! as SearchResultItem),
-          ),
-        ),
-      ],
+    ),
+    GoRoute(
+      path: AppRoutes.detail,
+      redirect: (context, state) =>
+          state.extra is SearchResultItem ? null : AppRoutes.results,
+      pageBuilder: (context, state) => _animatedPage(
+        state: state,
+        child: DetailPage(item: state.extra! as SearchResultItem),
+      ),
     ),
   ],
 );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_search_app/presentation/app/app_router.dart';
+import 'package:github_search_app/presentation/app/app_routes.dart';
 import 'package:github_search_app/presentation/common/widgets/app_page_background.dart';
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
 import 'package:github_search_app/presentation/search/widgets/search_header.dart';
@@ -136,7 +136,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         searchCubit.state.selectedCategory,
       );
       if (mounted) {
-        context.pushNamed(AppRoutes.results);
+        context.push(AppRoutes.results);
       }
     }
   }
