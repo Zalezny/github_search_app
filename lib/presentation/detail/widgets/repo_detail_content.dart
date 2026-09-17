@@ -8,7 +8,7 @@ import 'package:github_search_app/presentation/detail/widgets/gradient_action_bu
 import 'package:github_search_app/presentation/detail/widgets/hero_section.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
 import 'package:github_search_app/presentation/detail/widgets/stats_grid.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class RepoDetailContent extends StatelessWidget {
   final GithubRepo repo;
@@ -33,7 +33,7 @@ class RepoDetailContent extends StatelessWidget {
       child: SlideTransition(
         position: slideAnimation,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: AppSpacing.page,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,24 +48,31 @@ class RepoDetailContent extends StatelessWidget {
                   children: [
                     Text(
                       repo.name,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 20),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium?.copyWith(fontSize: 20),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
                     Text(
                       repo.fullName,
-                      style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
                       repo.description ?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: AppTheme.mutedForeground),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.xl),
 
               // Stats grid
               StatsGrid(
@@ -80,37 +87,50 @@ class RepoDetailContent extends StatelessWidget {
                     label: 'Forks',
                     value: FormatUtils.formatNumber(repo.forksCount),
                   ),
-                  InfoCard(icon: Icons.code, label: 'Language', value: repo.language),
-                  InfoCard(icon: Icons.person, label: 'Owner', value: repo.owner.login),
+                  InfoCard(
+                    icon: Icons.code,
+                    label: 'Language',
+                    value: repo.language,
+                  ),
+                  InfoCard(
+                    icon: Icons.person,
+                    label: 'Owner',
+                    value: repo.owner.login,
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // Description
               if (repo.description != null)
                 Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(AppSpacing.xl),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.description_outlined, size: 20, color: AppTheme.primary),
-                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.description_outlined,
+                              size: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
                             Text(
                               'About',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: AppSpacing.md),
                         Text(
                           repo.description!,
                           style: TextStyle(
-                            color: AppTheme.mutedForeground,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontSize: 15,
                             height: 1.5,
                           ),
@@ -119,29 +139,39 @@ class RepoDetailContent extends StatelessWidget {
                     ),
                   ),
                 ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // Last updated
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: AppSpacing.card,
                   child: Row(
                     children: [
-                      Icon(Icons.update, color: AppTheme.mutedForeground),
-                      const SizedBox(width: 12),
+                      Icon(
+                        Icons.update,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Last Updated',
-                              style: TextStyle(color: AppTheme.mutedForeground, fontSize: 13),
-                            ),
-                            const SizedBox(height: 4),
                             Text(
-                              app_date_utils.DateUtils.formatDate(repo.updatedAt ?? ''),
-                              style: const TextStyle(
-                                color: AppTheme.foreground,
+                              'Last Updated',
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              app_date_utils.DateUtils.formatDate(
+                                repo.updatedAt ?? '',
+                              ),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -153,7 +183,7 @@ class RepoDetailContent extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.xl),
 
               // Action
               GradientActionButton(
@@ -163,11 +193,10 @@ class RepoDetailContent extends StatelessWidget {
 
                   if (!success && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text('Unable to open GitHub URL'),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
                         duration: Duration(seconds: 3),
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       ),
                     );
                   }

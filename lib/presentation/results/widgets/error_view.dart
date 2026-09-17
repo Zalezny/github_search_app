@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class ErrorView extends StatelessWidget {
   final String error;
@@ -28,30 +28,28 @@ class ErrorView extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(errorIcon, size: 80, color: AppTheme.mutedForeground),
-            const SizedBox(height: 24),
+            Icon(
+              errorIcon,
+              size: 80,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: AppSpacing.xxl),
             Text('Oops!', style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             Text(
               errorMessage,
-              style: TextStyle(color: AppTheme.mutedForeground, fontSize: 16),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 16,
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: onRetry,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('Try Again'),
-            ),
+            const SizedBox(height: AppSpacing.xxxl),
+            ElevatedButton(onPressed: onRetry, child: const Text('Try Again')),
           ],
         ),
       ),

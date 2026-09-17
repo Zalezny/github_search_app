@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 import 'package:github_search_app/core/utils/format_utils.dart';
 import 'package:github_search_app/domain/entities/github_user.dart';
 import 'package:github_search_app/domain/entities/search_result.dart';
-import 'package:github_search_app/presentation/app/cubit/home_cubit.dart';
+import 'package:github_search_app/presentation/app/app_router.dart';
 import 'package:github_search_app/presentation/results/widgets/repo_card.dart';
 import 'package:github_search_app/presentation/results/widgets/user_card.dart';
 import 'package:github_search_app/presentation/results/widgets/loading_more_indicator.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
+import 'package:go_router/go_router.dart';
 
 class ResultsListView extends StatelessWidget {
   final SearchState state;
   final ScrollController scrollController;
 
-  const ResultsListView({super.key, required this.state, required this.scrollController});
+  const ResultsListView({
+    super.key,
+    required this.state,
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final itemCount = state.results.length + (state.isLoadingMore || state.hasMorePages ? 1 : 0);
+    final itemCount =
+        state.results.length +
+        (state.isLoadingMore || state.hasMorePages ? 1 : 0);
 
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         // Show loading indicator at the bottom
@@ -29,7 +36,7 @@ class ResultsListView extends StatelessWidget {
           if (state.isLoadingMore) {
             return const LoadingMoreIndicator();
           } else if (state.hasMorePages) {
-            return const SizedBox(height: 80);
+            return const SizedBox(height: AppSpacing.pageBottom);
           } else {
             return const SizedBox.shrink();
           }
@@ -42,20 +49,16 @@ class ResultsListView extends StatelessWidget {
 
         if (!shouldAnimate) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: AppSpacing.md),
             child: item.map(
               repo: (repoItem) => RepoCard(
                 repo: repoItem.repo,
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
                 formatNumber: FormatUtils.formatNumber,
               ),
               user: (userItem) => UserCard(
                 user: userItem.user,
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
               ),
               userDetail: (userDetailItem) => UserCard(
                 user: GithubUser(
@@ -65,9 +68,7 @@ class ResultsListView extends StatelessWidget {
                   htmlUrl: userDetailItem.userDetail.htmlUrl,
                   type: 'User',
                 ),
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
               ),
             ),
           );
@@ -84,20 +85,16 @@ class ResultsListView extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: AppSpacing.md),
             child: item.map(
               repo: (repoItem) => RepoCard(
                 repo: repoItem.repo,
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
                 formatNumber: FormatUtils.formatNumber,
               ),
               user: (userItem) => UserCard(
                 user: userItem.user,
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
               ),
               userDetail: (userDetailItem) => UserCard(
                 user: GithubUser(
@@ -107,14 +104,16 @@ class ResultsListView extends StatelessWidget {
                   htmlUrl: userDetailItem.userDetail.htmlUrl,
                   type: 'User',
                 ),
-                onTap: () {
-                  context.read<HomeCubit>().selectResult(item);
-                },
+                onTap: () => _openDetail(context, item),
               ),
             ),
           ),
         );
       },
     );
+  }
+
+  void _openDetail(BuildContext context, SearchResultItem item) {
+    context.pushNamed(AppRoutes.detail, extra: item);
   }
 }

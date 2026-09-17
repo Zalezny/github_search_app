@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class QuickSearchTag extends StatefulWidget {
   final String tag;
@@ -11,7 +11,8 @@ class QuickSearchTag extends StatefulWidget {
   State<QuickSearchTag> createState() => _QuickSearchTagState();
 }
 
-class _QuickSearchTagState extends State<QuickSearchTag> with SingleTickerProviderStateMixin {
+class _QuickSearchTagState extends State<QuickSearchTag>
+    with SingleTickerProviderStateMixin {
   late AnimationController _scaleController;
   late Animation<double> _scaleAnimation;
 
@@ -22,10 +23,9 @@ class _QuickSearchTagState extends State<QuickSearchTag> with SingleTickerProvid
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.92,
-    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeInOutCubic));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.92).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOutCubic),
+    );
   }
 
   @override
@@ -56,18 +56,33 @@ class _QuickSearchTagState extends State<QuickSearchTag> with SingleTickerProvid
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md - AppSpacing.xxs,
+          ),
           decoration: BoxDecoration(
-            color: AppTheme.card.withValues(alpha: 0.5),
-            border: Border.all(color: AppTheme.border),
-            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(
+              context,
+            ).colorScheme.tertiary.withValues(alpha: 0.5),
+            border: Border.all(color: Theme.of(context).colorScheme.outline),
+            borderRadius: AppRadii.extraLarge,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(widget.tag, style: const TextStyle(color: AppTheme.foreground, fontSize: 14)),
-              const SizedBox(width: 8),
-              const Icon(Icons.arrow_forward, size: 14, color: AppTheme.mutedForeground),
+              Text(
+                widget.tag,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Icon(
+                Icons.arrow_forward,
+                size: 14,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),

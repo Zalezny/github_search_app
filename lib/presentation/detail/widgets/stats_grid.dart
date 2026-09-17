@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class StatsGrid extends StatelessWidget {
   final List<Widget> children;
@@ -10,8 +11,8 @@ class StatsGrid extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
+        spacing: AppSpacing.md,
+        runSpacing: AppSpacing.md,
         runAlignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: WrapAlignment.center,

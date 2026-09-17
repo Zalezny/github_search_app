@@ -8,7 +8,7 @@ import 'package:github_search_app/presentation/detail/widgets/hero_section.dart'
 import 'package:github_search_app/presentation/detail/widgets/info_card.dart';
 import 'package:github_search_app/presentation/detail/widgets/info_card_row.dart';
 import 'package:github_search_app/presentation/detail/widgets/stats_grid.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class UserDetailContent extends StatelessWidget {
   final GithubUserDetail user;
@@ -33,7 +33,7 @@ class UserDetailContent extends StatelessWidget {
       child: SlideTransition(
         position: slideAnimation,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: AppSpacing.page,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,23 +48,32 @@ class UserDetailContent extends StatelessWidget {
                   children: [
                     Text(
                       user.name ?? user.login,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 20),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium?.copyWith(fontSize: 20),
                     ),
-                    const SizedBox(height: 4),
-                    Text('@${user.login}', style: TextStyle(color: AppTheme.mutedForeground)),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      '@${user.login}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     if (user.bio != null) ...[
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         user.bio!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: AppTheme.mutedForeground),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // Stats grid
               StatsGrid(
@@ -91,25 +100,37 @@ class UserDetailContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // Info rows
               if (user.location != null)
-                InfoCardRow(icon: Icons.location_on, label: 'Location', value: user.location!),
+                InfoCardRow(
+                  icon: Icons.location_on,
+                  label: 'Location',
+                  value: user.location!,
+                ),
               if (user.company != null) ...[
-                const SizedBox(height: 12),
-                InfoCardRow(icon: Icons.business, label: 'Company', value: user.company!),
+                const SizedBox(height: AppSpacing.md),
+                InfoCardRow(
+                  icon: Icons.business,
+                  label: 'Company',
+                  value: user.company!,
+                ),
               ],
               if (user.email != null) ...[
-                const SizedBox(height: 12),
-                InfoCardRow(icon: Icons.email, label: 'Email', value: user.email!),
+                const SizedBox(height: AppSpacing.md),
+                InfoCardRow(
+                  icon: Icons.email,
+                  label: 'Email',
+                  value: user.email!,
+                ),
               ],
               if (user.blog != null && user.blog!.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 InfoCardRow(icon: Icons.link, label: 'Blog', value: user.blog!),
               ],
 
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.xl),
               GradientActionButton(
                 onTap: () async {
                   final cubit = context.read<DetailCubit>();
@@ -117,11 +138,10 @@ class UserDetailContent extends StatelessWidget {
 
                   if (!success && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text('Unable to open GitHub URL'),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
                         duration: Duration(seconds: 3),
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       ),
                     );
                   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class GradientActionButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -21,24 +22,32 @@ class GradientActionButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isRepoType
-                ? [AppTheme.blueGradientStart, AppTheme.blueGradientEnd]
-                : [AppTheme.purpleGradientStart, AppTheme.purpleGradientEnd],
-          ),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: AppTheme.primary.withValues(alpha: 0.18), blurRadius: 12)],
+          gradient: isRepoType
+              ? context.appColors.repositoryGradient
+              : context.appColors.userGradient,
+          borderRadius: AppRadii.medium,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.18),
+              blurRadius: AppRadii.md,
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white),
-            const SizedBox(width: 8),
+            Icon(icon, color: context.appColors.onGradient),
+            const SizedBox(width: AppSpacing.sm),
             Text(
               text,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: context.appColors.onGradient,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

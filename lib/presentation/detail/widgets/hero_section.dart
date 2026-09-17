@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class HeroSection extends StatelessWidget {
   final String avatarUrl;
@@ -20,15 +20,17 @@ class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.card,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: gradientColors,
         ),
-        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.12)),
-        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+        ),
+        borderRadius: AppRadii.extraLarge,
       ),
       child: Row(
         children: [
@@ -39,13 +41,21 @@ class HeroSection extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppTheme.primary.withValues(alpha: 0.18), width: 2),
+                  border: Border.all(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.18),
+                    width: 2,
+                  ),
                 ),
-                child: CircleAvatar(radius: 40, backgroundImage: NetworkImage(avatarUrl)),
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(avatarUrl),
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           Expanded(child: content),
         ],
       ),

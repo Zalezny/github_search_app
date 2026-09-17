@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:github_search_app/presentation/search/widgets/search_text_field.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class AnimatedSearchField extends StatefulWidget {
   final TextEditingController controller;
@@ -32,7 +32,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField>
     super.initState();
     _rotationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: AppDurations.loading,
     );
   }
 
@@ -56,16 +56,22 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField>
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: AppTheme.normalAnimation,
+      duration: AppDurations.normal,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.large,
         border: widget.isLoading
             ? null
-            : Border.all(color: widget.isFocused ? AppTheme.primary : AppTheme.border, width: 1),
+            : Border.all(
+                color: widget.isFocused
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.outline,
+              ),
         boxShadow: widget.isFocused && !widget.isLoading
             ? [
                 BoxShadow(
-                  color: AppTheme.primary.withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.2),
                   blurRadius: 12,
                   spreadRadius: 2,
                 ),
@@ -79,7 +85,8 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField>
                 return CustomPaint(
                   painter: _LoadingBorderPainter(
                     progress: _rotationController.value,
-                    color: AppTheme.primary,
+                    color: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.outline,
                   ),
                   child: child,
                 );
@@ -106,17 +113,25 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField>
 class _LoadingBorderPainter extends CustomPainter {
   final double progress;
   final Color color;
+  final Color backgroundColor;
 
-  _LoadingBorderPainter({required this.progress, required this.color});
+  _LoadingBorderPainter({
+    required this.progress,
+    required this.color,
+    required this.backgroundColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(16));
+    final rrect = RRect.fromRectAndRadius(
+      rect,
+      const Radius.circular(AppRadii.lg),
+    );
 
     // Background border (subtle)
     final backgroundPaint = Paint()
-      ..color = AppTheme.border
+      ..color = backgroundColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawRRect(rrect, backgroundPaint);
@@ -146,6 +161,8 @@ class _LoadingBorderPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_LoadingBorderPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.color != color;
+    return oldDelegate.progress != progress ||
+        oldDelegate.color != color ||
+        oldDelegate.backgroundColor != backgroundColor;
   }
 }

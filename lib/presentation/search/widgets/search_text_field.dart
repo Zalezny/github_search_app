@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class SearchTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -23,38 +23,45 @@ class SearchTextField extends StatelessWidget {
       controller: controller,
       focusNode: focusNode,
       enabled: !isLoading,
-      style: const TextStyle(color: AppTheme.foreground, fontSize: 16),
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurface,
+        fontSize: 16,
+      ),
       decoration: InputDecoration(
-        hintText: isLoading ? 'Searching...' : 'Search repositories or developers...',
-        hintStyle: TextStyle(color: AppTheme.mutedForeground, fontSize: 16),
+        hintText: isLoading
+            ? 'Searching...'
+            : 'Search repositories or developers...',
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          fontSize: 16,
+        ),
         prefixIcon: AnimatedSwitcher(
-          duration: AppTheme.fastAnimation,
+          duration: AppDurations.fast,
           child: isLoading
               ? const Padding(
                   key: ValueKey('loading'),
-                  padding: EdgeInsets.all(14.0),
+                  padding: EdgeInsets.all(AppSpacing.md + AppSpacing.xxs),
                   child: SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                 )
               : Icon(
                   key: const ValueKey('search'),
                   Icons.search,
-                  color: isFocused ? AppTheme.primary : AppTheme.mutedForeground,
+                  color: isFocused
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
         ),
         filled: true,
-        fillColor: AppTheme.card,
+        fillColor: Theme.of(context).colorScheme.tertiary,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadii.large,
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: AppSpacing.card,
       ),
       onSubmitted: (_) => onSubmit(),
     );

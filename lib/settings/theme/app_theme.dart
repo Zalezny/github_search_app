@@ -1,69 +1,135 @@
 import 'package:flutter/material.dart';
 import 'package:github_search_app/settings/theme/app_colors.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
-class AppTheme {
-  // Re-export colors for backward compatibility
-  static const Color background = AppColors.background;
-  static const Color foreground = AppColors.foreground;
-  static const Color card = AppColors.card;
-  static const Color cardForeground = AppColors.cardForeground;
+/// App-specific semantic colors not covered by Material's [ColorScheme].
+@immutable
+class AppThemeColors extends ThemeExtension<AppThemeColors> {
+  final LinearGradient backgroundGradient;
+  final LinearGradient repositoryGradient;
+  final LinearGradient userGradient;
+  final Color onGradient;
 
-  static const Color primary = AppColors.primary;
-  static const Color primaryForeground = AppColors.primaryForeground;
+  const AppThemeColors({
+    required this.backgroundGradient,
+    required this.repositoryGradient,
+    required this.userGradient,
+    required this.onGradient,
+  });
 
-  static const Color secondary = AppColors.secondary;
-  static const Color secondaryForeground = AppColors.secondaryForeground;
+  static const dark = AppThemeColors(
+    backgroundGradient: AppColors.backgroundGradient,
+    repositoryGradient: AppColors.blueGradient,
+    userGradient: AppColors.purpleGradient,
+    onGradient: AppColors.foreground,
+  );
 
-  static const Color muted = AppColors.muted;
-  static const Color mutedForeground = AppColors.mutedForeground;
+  @override
+  AppThemeColors copyWith({
+    LinearGradient? backgroundGradient,
+    LinearGradient? repositoryGradient,
+    LinearGradient? userGradient,
+    Color? onGradient,
+  }) => AppThemeColors(
+    backgroundGradient: backgroundGradient ?? this.backgroundGradient,
+    repositoryGradient: repositoryGradient ?? this.repositoryGradient,
+    userGradient: userGradient ?? this.userGradient,
+    onGradient: onGradient ?? this.onGradient,
+  );
 
-  static const Color border = AppColors.border;
-  static const Color input = AppColors.input;
+  @override
+  AppThemeColors lerp(covariant AppThemeColors? other, double t) {
+    if (other == null) return this;
+    return AppThemeColors(
+      backgroundGradient: LinearGradient.lerp(
+        backgroundGradient,
+        other.backgroundGradient,
+        t,
+      )!,
+      repositoryGradient: LinearGradient.lerp(
+        repositoryGradient,
+        other.repositoryGradient,
+        t,
+      )!,
+      userGradient: LinearGradient.lerp(userGradient, other.userGradient, t)!,
+      onGradient: Color.lerp(onGradient, other.onGradient, t)!,
+    );
+  }
+}
 
-  static const Color blueGradientStart = AppColors.blueGradientStart;
-  static const Color blueGradientEnd = AppColors.blueGradientEnd;
+extension AppThemeContext on BuildContext {
+  AppThemeColors get appColors => Theme.of(this).extension<AppThemeColors>()!;
+}
 
-  static const Color purpleGradientStart = AppColors.purpleGradientStart;
-  static const Color purpleGradientEnd = AppColors.purpleGradientEnd;
-
+abstract final class AppTheme {
   static ThemeData get darkTheme {
+    const colorScheme = ColorScheme.dark(
+      surface: AppColors.background,
+      onSurface: AppColors.foreground,
+      onSurfaceVariant: AppColors.mutedForeground,
+      primary: AppColors.primary,
+      onPrimary: AppColors.primaryForeground,
+      secondary: AppColors.secondary,
+      onSecondary: AppColors.secondaryForeground,
+      tertiary: AppColors.card,
+      onTertiary: AppColors.cardForeground,
+      error: AppColors.error,
+      onError: AppColors.foreground,
+      outline: AppColors.border,
+      outlineVariant: AppColors.muted,
+    );
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.background,
-      colorScheme: const ColorScheme.dark(
-        surface: AppColors.background,
-        onSurface: AppColors.foreground,
-        primary: AppColors.primary,
-        onPrimary: AppColors.primaryForeground,
-        secondary: AppColors.secondary,
-        onSecondary: AppColors.secondaryForeground,
-        tertiary: AppColors.card,
-        onTertiary: AppColors.cardForeground,
-        outline: AppColors.border,
-        outlineVariant: AppColors.muted,
-      ),
-      cardTheme: CardThemeData(
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      extensions: const [AppThemeColors.dark],
+      cardTheme: const CardThemeData(
         color: AppColors.card,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: AppRadii.large),
       ),
-      inputDecorationTheme: InputDecorationTheme(
+      inputDecorationTheme: const InputDecorationTheme(
         filled: true,
         fillColor: AppColors.card,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.lg,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: AppRadii.large,
+          borderSide: BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: AppRadii.large,
+          borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderRadius: AppRadii.large,
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xxxl,
+            vertical: AppSpacing.lg,
+          ),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadii.medium),
+        ),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: AppColors.error,
+        contentTextStyle: TextStyle(color: AppColors.foreground),
+        behavior: SnackBarBehavior.floating,
+      ),
+      iconTheme: const IconThemeData(color: AppColors.mutedForeground),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontSize: 48,
@@ -87,9 +153,4 @@ class AppTheme {
       ),
     );
   }
-
-  // Animation durations
-  static const Duration fastAnimation = Duration(milliseconds: 200);
-  static const Duration normalAnimation = Duration(milliseconds: 300);
-  static const Duration slowAnimation = Duration(milliseconds: 400);
 }

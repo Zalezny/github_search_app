@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/presentation/search/widgets/quick_search_tag.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class QuickSearchTagsSection extends StatelessWidget {
   final List<String> repoQuickSearchTags;
@@ -25,7 +26,7 @@ class QuickSearchTagsSection extends StatelessWidget {
             : userQuickSearchTags;
 
         return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
+          duration: AppDurations.normal,
           switchInCurve: Curves.easeInOut,
           switchOutCurve: Curves.easeInOut,
           transitionBuilder: (child, animation) {
@@ -42,15 +43,18 @@ class QuickSearchTagsSection extends StatelessWidget {
           },
           child: Container(
             key: ValueKey(state.selectedCategory),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: AppSpacing.sectionInsets,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('QUICK SEARCH', style: Theme.of(context).textTheme.labelSmall),
-                const SizedBox(height: 16),
+                Text(
+                  'QUICK SEARCH',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(height: AppSpacing.lg),
                 Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
                   children: tags.asMap().entries.map((entry) {
                     return TweenAnimationBuilder<double>(
                       key: ValueKey('${state.selectedCategory}_${entry.value}'),
@@ -63,7 +67,10 @@ class QuickSearchTagsSection extends StatelessWidget {
                           child: Opacity(opacity: value, child: child),
                         );
                       },
-                      child: QuickSearchTag(tag: entry.value, onTap: () => onTagTap(entry.value)),
+                      child: QuickSearchTag(
+                        tag: entry.value,
+                        onTap: () => onTagTap(entry.value),
+                      ),
                     );
                   }).toList(),
                 ),

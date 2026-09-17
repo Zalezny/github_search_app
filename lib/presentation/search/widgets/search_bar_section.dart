@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/presentation/search/widgets/animated_search_field.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class SearchBarSection extends StatelessWidget {
   final Animation<Offset> slideAnimation;
@@ -27,7 +28,7 @@ class SearchBarSection extends StatelessWidget {
         return SlideTransition(
           position: slideAnimation,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: AppSpacing.sectionInsets,
             child: AnimatedSearchField(
               controller: controller,
               focusNode: focusNode,

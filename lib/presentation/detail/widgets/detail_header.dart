@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class DetailHeader extends StatelessWidget {
   final VoidCallback onBack;
   final Animation<double> animation;
 
-  const DetailHeader({super.key, required this.onBack, required this.animation});
+  const DetailHeader({
+    super.key,
+    required this.onBack,
+    required this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +20,32 @@ class DetailHeader extends StatelessWidget {
       ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
       child: Container(
         decoration: BoxDecoration(
-          color: AppTheme.card.withValues(alpha: 0.95),
-          border: Border(bottom: BorderSide(color: AppTheme.border)),
+          color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.95),
+          border: Border(
+            bottom: BorderSide(color: Theme.of(context).colorScheme.outline),
+          ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.compactCard,
           child: Row(
             children: [
               GestureDetector(
                 onTap: onBack,
                 child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(Icons.arrow_back_ios, color: AppTheme.primary),
+                  padding: const EdgeInsets.all(AppSpacing.sm),
+                  decoration: const BoxDecoration(borderRadius: AppRadii.small),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(
                 'Details',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: AppTheme.mutedForeground),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),

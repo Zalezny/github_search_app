@@ -29,8 +29,6 @@ import 'package:github_search_app/domain/usecases/search_repositories_usecase.da
     as _i643;
 import 'package:github_search_app/domain/usecases/search_users_usecase.dart'
     as _i564;
-import 'package:github_search_app/presentation/app/cubit/home_cubit.dart'
-    as _i501;
 import 'package:github_search_app/presentation/detail/cubit/detail_cubit.dart'
     as _i834;
 import 'package:github_search_app/presentation/search/cubit/search_cubit.dart'
@@ -47,7 +45,6 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final appModule = _$AppModule();
-    gh.factory<_i501.HomeCubit>(() => _i501.HomeCubit());
     gh.lazySingleton<_i974.Logger>(() => appModule.logger());
     gh.lazySingleton<_i361.Dio>(() => appModule.dio(gh<_i974.Logger>()));
     gh.lazySingleton<_i792.GithubRepoApiService>(

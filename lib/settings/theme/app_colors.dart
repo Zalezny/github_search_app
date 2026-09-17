@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Application color palette
-class AppColors {
+/// Raw palette. Widgets consume semantic ThemeData values instead.
+abstract final class AppColors {
   // Base colors
   static const Color background = Color(0xFF1A1A1A); // oklch(0.1 0 0)
   static const Color foreground = Color(0xFFF2F2F2); // oklch(0.95 0 0)
@@ -23,9 +23,10 @@ class AppColors {
   // UI Elements
   static const Color border = Color(0xFF404040);
   static const Color input = Color(0xFF333333);
+  static const Color error = Color(0xFFEF5350);
 
   // Gradient colors for categories
-  static const Color blueGradientStart = Color(0xFF3B82F6);
+  static const Color blueGradientStart = primary;
   static const Color blueGradientEnd = Color(0xFF06B6D4);
 
   static const Color purpleGradientStart = Color(0xFFA855F7);

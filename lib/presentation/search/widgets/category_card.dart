@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github_search_app/presentation/search/cubit/search_state.dart';
 import 'package:github_search_app/settings/theme/app_theme.dart';
+import 'package:github_search_app/settings/theme/app_design_tokens.dart';
 
 class CategoryCard extends StatefulWidget {
   final bool isSelected;
@@ -26,7 +27,8 @@ class CategoryCard extends StatefulWidget {
   State<CategoryCard> createState() => _CategoryCardState();
 }
 
-class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderStateMixin {
+class _CategoryCardState extends State<CategoryCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _scaleController;
   late Animation<double> _scaleAnimation;
 
@@ -35,12 +37,11 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
     super.initState();
     _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: AppDurations.fast,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -71,11 +72,11 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: AppDurations.normal,
           curve: Curves.easeOut,
           height: 180,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadii.large,
             gradient: widget.isSelected
                 ? LinearGradient(
                     begin: Alignment.topLeft,
@@ -83,9 +84,13 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
                     colors: widget.gradientColors,
                   )
                 : null,
-            color: widget.isSelected ? null : widget.gradientColors[0].withValues(alpha: 0.1),
+            color: widget.isSelected
+                ? null
+                : widget.gradientColors[0].withValues(alpha: 0.1),
             border: Border.all(
-              color: widget.isSelected ? Colors.transparent : AppTheme.border,
+              color: widget.isSelected
+                  ? Colors.transparent
+                  : Theme.of(context).colorScheme.outline,
               width: 1,
             ),
             boxShadow: widget.isSelected
@@ -103,7 +108,7 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
             children: [
               // Content
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(AppSpacing.xl),
                 child: SizedBox(
                   width: double.infinity,
                   child: Column(
@@ -112,36 +117,44 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: AppSpacing.card,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: widget.isSelected ? 0.2 : 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          color: context.appColors.onGradient.withValues(
+                            alpha: widget.isSelected ? 0.2 : 0.1,
+                          ),
+                          borderRadius: AppRadii.medium,
                         ),
                         child: Icon(
                           widget.icon,
                           size: 32,
-                          color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                          color: widget.isSelected
+                              ? context.appColors.onGradient
+                              : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSpacing.md),
                       Text(
                         widget.title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: widget.isSelected ? Colors.white : AppTheme.foreground,
+                          color: widget.isSelected
+                              ? context.appColors.onGradient
+                              : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: AppSpacing.xs),
                       Text(
                         widget.description,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 13,
                           color: widget.isSelected
-                              ? Colors.white.withValues(alpha: 0.8)
-                              : AppTheme.mutedForeground,
+                              ? context.appColors.onGradient.withValues(
+                                  alpha: 0.8,
+                                )
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -156,7 +169,10 @@ class _CategoryCardState extends State<CategoryCard> with SingleTickerProviderSt
                   child: Container(
                     width: 8,
                     height: 8,
-                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: context.appColors.onGradient,
+                      shape: BoxShape.circle,
+                    ),
                     child: const _AnimatedPulse(),
                   ),
                 ),
@@ -175,15 +191,18 @@ class _AnimatedPulse extends StatefulWidget {
   State<_AnimatedPulse> createState() => _AnimatedPulseState();
 }
 
-class _AnimatedPulseState extends State<_AnimatedPulse> with SingleTickerProviderStateMixin {
+class _AnimatedPulseState extends State<_AnimatedPulse>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2))
-      ..repeat(reverse: true);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
     _animation = Tween<double>(
       begin: 1.0,
       end: 0.7,
